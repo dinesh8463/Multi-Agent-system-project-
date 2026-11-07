@@ -1,7 +1,7 @@
 {
   "mode": "demo",
   "jobs": 29,
-  "elapsed_seconds": 164.14806239999598,
+  "elapsed_seconds": 100.32621639998979,
   "workers": 4,
   "configuration": {
     "size": 100,
@@ -9,7 +9,7 @@
     "regions": 25,
     "survivors": 9,
     "n": 20,
-    "steps": 180,
+    "steps": 120,
     "v_max": 2.0,
     "sense_radius": 6.0,
     "comm_range": 25.0,
@@ -52,5 +52,5 @@
       43
     ]
   },
-  "fingerprint": "6e560a6ad43a0929"
+  "fingerprint": "49259c4b7dbcc857"
 }

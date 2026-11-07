@@ -1,0 +1,39 @@
+PASS pytest: 31 passed in 22.77s
+PASS decentralization_grep: forbidden policy imports=[]
+PASS make_demo: demo process exit=0
+PASS demo_runtime: 149.05s (budget <300s; matching cached experiment jobs may be reused)
+PASS figures_results/figures: missing=[]
+PASS figure_resolution_results/figures: 300dpi and width<=6.5in: violations=[]
+PASS figures_results/demo/figures: missing=[]
+PASS figure_resolution_results/demo/figures: 300dpi and width<=6.5in: violations=[]
+PASS animation_formats: GIF frames=115, bytes=2033081; MP4 frames=121, shape=(480, 640, 3)
+PASS animation_failure_and_recovery: 2 physical crashes; 2 recovered
+PASS animation_visible_link_failure: 20 previously visible radio edges fail while endpoints remain in range before non-vacuous recovery
+PASS animation_source_equivalence: all scientific metrics match results/full/jobs/exp2_failure_10_3004.json; illustration is selected, not a distribution summary
+PASS exp1_seeds: 60 rows, 3 conditions, expected 20 unique seeds each
+PASS exp2_seeds: 80 rows, 4 conditions, expected 20 unique seeds each
+PASS exp3_seeds: 60 rows, 3 conditions, expected 20 unique seeds each
+PASS exp4_seeds: 40 rows, 2 conditions, expected 20 unique seeds each
+PASS exp5_seeds: 80 rows, 4 conditions, expected 20 unique seeds each
+PASS exp6_seeds: 80 rows, 4 conditions, expected 20 unique seeds each
+PASS exp7_seeds: 180 rows, 9 conditions, expected 20 unique seeds each
+PASS aggregate_and_summary_integrity: aggregate matches all seven CSVs; 580 rows; summary covers required metrics and repetitions
+PASS boundary_fix_provenance: 580 old/new cases use identical parameters; 1 have changed scientific measurements; see boundary_fix_changes.csv
+PASS source_fingerprints: stale jobs=[]
+PASS current_sweep_configurations: mismatched job configurations=[]
+PASS paired_scenarios: 120 paired scenario groups checked, including batteries/positions; identical intervention schedules across method comparisons
+PASS transport_optimization_regression: current-policy seed-41 end-to-end reference-bus regression passed; 0 additional matching archived episodes compared; differences=[]
+PASS coverage_monotonic: Checked every saved episode prefix
+PASS zero_failure_success: 100.0% (required >=90%)
+PASS failure_trend_failure_0_failure_10: paired time delta 24.300 +/- 20.482s; success delta 0.000 +/- 0.000; statistical noise allowed
+PASS failure_trend_failure_10_failure_20: paired time delta 49.650 +/- 44.733s; success delta -0.200 +/- 0.192; statistical noise allowed
+PASS failure_trend_failure_20_failure_30: paired time delta 12.000 +/- 52.762s; success delta 0.000 +/- 0.263; statistical noise allowed
+FAIL healing_recovery: ON=0.938, OFF=0.963
+PASS wmsr_bound: {'ordinary_bias': 9.49731794529882, 'ordinary_random': 3.2795201141943813, 'wmsr_bias': 0.0435157789672599, 'wmsr_random': 0.016063135728566207}
+PASS spectral_rate: relative curve tolerance 1e-5, absolute 1e-10
+PASS scaling_communication: {10: 22.71828033813595, 20: 80.66863960974288, 50: 503.48802022753944, 100: 1782.318191860791}
+PASS strong_task_ownership: 0 duplicate task execution steps; execution requires a majority lease
+PASS hard_separation: 0 pair-step violations; all measured live pair distances must exceed d_min
+PASS scientific_exceptions_explained: failed scientific checks=['healing_recovery']; completion-gate item 4 requires data-backed investigation in FINDINGS
+PASS documentation: README and required scientific documentation
+PASS report_and_slides_untouched: Neither report nor slides was created

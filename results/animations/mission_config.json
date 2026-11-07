@@ -4,14 +4,14 @@
   "regions": 25,
   "survivors": 9,
   "n": 20,
-  "steps": 240,
+  "steps": 300,
   "v_max": 2.0,
   "sense_radius": 6.0,
-  "comm_range": 45,
-  "p_link": 0.12,
+  "comm_range": 25.0,
+  "p_link": 0.02,
   "drop": 0.05,
   "delay": 2,
-  "failure_fraction": 0.3,
+  "failure_fraction": 0.1,
   "h_timeout": 5,
   "status_ttl": 40,
   "allocation_period": 20,
@@ -36,7 +36,7 @@
   "admm_k": 12,
   "admm_tol": 0.001,
   "admm_rho": 4.0,
-  "frame_stride": 3,
+  "frame_stride": 1,
   "debug": false,
   "evaluation_seeds": [
     3001,
@@ -65,5 +65,6 @@
     42,
     43
   ],
-  "seed": 41
+  "source_job": "results/full/jobs/exp2_failure_10_3004.json",
+  "seed": 3004
 }

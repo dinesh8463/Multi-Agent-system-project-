@@ -1,5 +1,6 @@
 {
-  "elapsed_seconds": 248.0492571,
-  "cache": "cold for final proximity model, 180-step demo",
-  "exit_code": 0
+  "elapsed_seconds": 149.0474411000032,
+  "exit_code": 0,
+  "fingerprint": "49259c4b7dbcc857",
+  "note": "Cold current-source demo, including figures and media, measured by verification."
 }

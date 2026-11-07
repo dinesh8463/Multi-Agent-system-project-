@@ -45,3 +45,13 @@
   scientific exception. It is not relabeled PASS and is not evidence that
   healing improves every metric. Software correctness and data-integrity checks
   remain mandatory and cannot be waived by this note.
+
+- This investigation was rechecked against the corrected boundary/dwell version.
+  Experiment 4 recovery rates and mission outcomes are unchanged. OFF seed 3010's
+  mean recovery time is corrected from 0.25 s to 0 s. A fresh source-matching
+  replay again gives failure at step 31, R16 completion at step 53, no later R16
+  controller activation, and mission completion after 212 steps. Comparison of
+  all 580 rerun episodes finds this single changed scientific measurement and no
+  configuration mismatches; runtime is excluded. Source:
+  [boundary_fix_changes.csv](../results/full/boundary_fix_changes.csv),
+  [version audit](../results/full/boundary_fix_comparison.json).

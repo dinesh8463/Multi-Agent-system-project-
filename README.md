@@ -74,7 +74,7 @@ it has not been interactively verified on this host.
   rendering-only changes do not. Failed jobs are never replaced by invented rows.
 - `results/figures/`: 300-dpi labeled PNGs, maximum width 6.5 inches.
 - `results/animations/mission.gif`, `mission.mp4`: actual captured demonstration
-  (a selected tuning-seed illustration), including agent and link failures and recovery. The JSON and trace
+  (selected evaluation episode, Experiment 2 seed 3004), including agent and link failures and recovery. The JSON and trace
   next to these files disclose the precise scenario and physical failures.
 - `results/demo/`: reduced run of every condition, separate seed 71. The demo
   inherits the same algorithms; only seeds and simulation size/horizon differ.
@@ -129,17 +129,18 @@ runtime fields. Rendering and verification time are separate from job wall time.
 
 The final measured values are written to `results/RUNTIMES.md` from run manifests.
 An initial complete reduced smoke run took 47.14 seconds for its 29 experiment
-jobs and about 27 seconds for diagnostic figures and animation. The current
-18-test suite took 19.48 seconds while other experiment processes were running;
-the expanded suite now has 31 tests (see `results/test_output.txt`).
+jobs and about 27 seconds for diagnostic figures and animation. The final
+31-test suite took 22.77 seconds (see `results/test_output.txt`).
 Cold dependency installation and first Matplotlib font-cache creation are excluded.
 
-The completed 580-job evaluation took **3291.09 seconds (54.85 minutes)** for the
-jobs plus about 32 seconds for final rendering. The final cold 120-step demo took
-**276.99 seconds** including its figures and media. Verification took 89.44 seconds
-on the first complete pass; a cached demo replay/render took 65.58 seconds. These
-are measured host timings, not the original 2-3-hour planning estimate. The cold
-full manifest is retained separately as `results/full/cold_run_manifest.json`.
+The corrected 580-job evaluation took **3523.46 seconds (58.72 minutes)** for the
+jobs plus about 81 seconds for final rendering. The cold 120-step demo took
+**149.05 seconds** including its figures and media, below the five-minute budget.
+Its 29 experiment jobs took 100.33 seconds. Final verification, including the
+tests and cold demo, took **181.51 seconds**. These are measured host timings,
+not the original 2-3-hour planning estimate. Cold manifests are retained as
+`results/full/cold_run_manifest.json` and `results/demo/cold_run_manifest.json`.
+The previous complete version and its timings remain in `results/pilot_complete_v1/`.
 
 The recorded dependency environment is Python 3.12.7; use
 `requirements-lock.txt` for those exact package versions. The minimum-version

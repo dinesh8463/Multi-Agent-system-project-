@@ -38,6 +38,32 @@ def findings(frame: pd.DataFrame, checks: list[dict]) -> None:
                      "The static connected solver is validated separately against the LP. Sources: "
                      "[all_metrics.csv](../results/full/all_metrics.csv), "
                      "[ADMM residuals](../results/full/diagnostics/admm.csv).")
+    comparison = frame[frame.experiment == 1]
+    auction = comparison[comparison.condition == 'auction'].set_index('seed')
+    optimized = comparison[comparison.condition == 'admm'].set_index('seed')
+    if len(auction) and len(optimized):
+        equal = int((auction.completion_time == optimized.completion_time).sum())
+        ratio = optimized.admm_fallbacks.sum()/max(1, optimized.allocation_rounds.sum())
+        lines.append(f'- ADMM and auction have identical mission completion/censoring times '
+                     f'in {equal}/{len(auction)} paired Exp1 cases. At least {ratio:.2%} of '
+                     'started ADMM local rounds explicitly fall back; remaining rounds can '
+                     'still be in progress at episode end, so they are not assumed converged. '
+                     'No mission-time advantage is demonstrated. Source: '
+                     '[exp1.csv](../results/full/exp1.csv).')
+    scale = frame[frame.experiment == 5]
+    largest = scale[scale.n == 100]
+    timeouts = largest[largest.timeout == 1]
+    if len(largest):
+        response_limited = int(((timeouts.coverage >= .95) & (timeouts.detection_rate == 1) & (timeouts.rescue_rate < 1)).sum())
+        lines.append(f'- At 100 drones, success is {largest.success.mean():.1%}; '
+                     f'{len(timeouts)}/{len(largest)} episodes time out. Of those, '
+                     f'{response_limited} have >=95% coverage and detect every survivor '
+                     'but leave rescues unfinished. Higher population does not guarantee '
+                     'better mission performance in this implementation. The individual '
+                     'coordination/motion bottlenecks behind these stalls have not been '
+                     'isolated; no post-evaluation parameter tuning hides them. Source: '
+                     '[exp5.csv](../results/full/exp5.csv), '
+                     '[scalability figure](../results/figures/exp5.png).')
     lines.append(f"- The robust local barrier recorded {frame.safety_violations.sum():.0f} pair-step "
                  f"separation violations and minimum margin {frame.separation_robustness.min():.3f}. "
                  "This is an empirical check under the explicitly modeled ideal local proximity sensor and bounded-speed assumptions. "
@@ -78,7 +104,7 @@ def findings(frame: pd.DataFrame, checks: list[dict]) -> None:
     if investigation.exists():
         lines += ['', '## Investigated scientific exceptions', '', investigation.read_text()]
     lines += ['- Interpretation limits and development seed overlap are disclosed in '
-              '[ASSUMPTIONS.md](ASSUMPTIONS.md). No evaluation result was discarded, '
+              '[ASSUMPTIONS.md](ASSUMPTIONS.md). No final-source evaluation result was discarded, '
               'and no favorable outcome was substituted for a measured one.']
     (ROOT/'docs/FINDINGS.md').write_text('\n'.join(lines)+'\n')
 
@@ -104,13 +130,25 @@ def main() -> None:
             re.finditer(r'(?:from\s+\.(?:env|sim|world)\s+import|import\s+(?:world|drones)\b)', source))
     check('decentralization_grep', not forbidden_imports, f'forbidden policy imports={forbidden_imports}')
     if not args.skip_demo:
+        demo_manifest_path = ROOT/'results/demo/run_manifest.json'
+        previous_demo_hash = (json.loads(demo_manifest_path.read_text()).get('fingerprint')
+                              if demo_manifest_path.exists() else None)
         demo_start = perf_counter()
         demo = subprocess.run([sys.executable, '-m', 'swarm.experiments.run_all', '--demo'], cwd=ROOT,
                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         (ROOT/'results/demo_verification.log').write_text(demo.stdout)
+        demo_elapsed = perf_counter()-demo_start
+        if demo.returncode == 0:
+            current_demo = json.loads(demo_manifest_path.read_text())
+            if previous_demo_hash != current_demo['fingerprint']:
+                (ROOT/'results/demo_wall_time.json').write_text(json.dumps(dict(
+                    elapsed_seconds=demo_elapsed, exit_code=demo.returncode,
+                    fingerprint=current_demo['fingerprint'],
+                    note='Cold current-source demo, including figures and media, measured by verification.'), indent=2))
+                (ROOT/'results/demo/cold_run_manifest.json').write_text(json.dumps(current_demo, indent=2))
         check('make_demo', demo.returncode == 0, f'demo process exit={demo.returncode}')
-        check('demo_runtime', perf_counter()-demo_start < 300,
-              f'{perf_counter()-demo_start:.2f}s (budget <300s; matching cached experiment jobs may be reused)')
+        check('demo_runtime', demo_elapsed < 300,
+              f'{demo_elapsed:.2f}s (budget <300s; matching cached experiment jobs may be reused)')
     else:
         check('make_demo', False, 'Demo rerun skipped; strict gate requires the real demo invocation')
     required_figures = ['architecture', 'environment_overview', 'topology_failure', 'task_assignment',
@@ -139,6 +177,11 @@ def main() -> None:
         failures = json.loads((ROOT/'results/animations/mission_failures.json').read_text())
         check('animation_failure_and_recovery', any(f['recovered'] is not None and f['tasks'] for f in failures),
               f'{len(failures)} physical crashes; {sum(f["recovered"] is not None for f in failures)} recovered')
+        links = pd.read_csv(ROOT/'results/animations/mission_link_events.csv')
+        first_recovery = min(f['recovered'] for f in failures if f['tasks'] and f['recovered'] is not None)
+        visible_losses = int(links.loc[links.t <= first_recovery, 'visible_link_losses'].sum())
+        check('animation_visible_link_failure', visible_losses > 0,
+              f'{visible_losses} previously visible radio edges fail while endpoints remain in range before non-vacuous recovery')
         replay_config = json.loads((ROOT/'results/animations/mission_config.json').read_text())
         replay = json.loads((ROOT/'results/animations/mission_metrics.json').read_text())
         source = json.loads((ROOT/replay_config['source_job']).read_text())['metrics']
@@ -165,8 +208,31 @@ def main() -> None:
         frames.append(data)
     if len(frames) == 7:
         frame = pd.concat(frames, ignore_index=True)
+        try:
+            aggregate = pd.read_csv(ROOT/'results/full/all_metrics.csv')
+            keys = ['experiment', 'condition', 'seed']
+            pd.testing.assert_frame_equal(aggregate.sort_values(keys).reset_index(drop=True),
+                                          frame.sort_values(keys).reset_index(drop=True), check_dtype=False)
+            summary_table = pd.read_csv(ROOT/'results/full/summary.csv')
+            required_metrics = {'completion_time', 'success', 'coverage', 'detection_rate',
+                                'fairness', 'energy', 'messages', 'consensus_error',
+                                'recovery_time', 'safety_violations', 'runtime_seconds'}
+            groups = set(map(tuple, frame[['experiment', 'condition']].drop_duplicates().to_numpy()))
+            summary_groups = set(map(tuple, summary_table[['experiment', 'condition']].drop_duplicates().to_numpy()))
+            valid_summary = len(aggregate) == len(frame) and groups == summary_groups and all(
+                required_metrics <= set(group.metric) and (group.n >= len(expected)).all()
+                for _, group in summary_table.groupby(['experiment', 'condition']))
+            check('aggregate_and_summary_integrity', valid_summary,
+                  f'aggregate matches all seven CSVs; {len(aggregate)} rows; summary covers required metrics and repetitions')
+        except Exception as exc:
+            check('aggregate_and_summary_integrity', False, repr(exc))
         from .analyze_results import recovery_events
         recovery_events(ROOT/'results/full/jobs', ROOT/'results/full')
+        if (ROOT/'results/pilot_complete_v1/jobs').exists():
+            from .compare_versions import compare
+            version_audit = compare(ROOT/'results/pilot_complete_v1/jobs', ROOT/'results/full/jobs', ROOT/'results/full')
+            check('boundary_fix_provenance', not version_audit['configuration_mismatches'],
+                  f"{version_audit['compared_jobs']} old/new cases use identical parameters; {version_audit['changed_jobs']} have changed scientific measurements; see boundary_fix_changes.csv")
         monotonic = True
         stale = []
         for p in (ROOT/'results/full/jobs').glob('*.json'):
@@ -276,12 +342,17 @@ def main() -> None:
     (ROOT/'results/sanity_report.md').write_text('\n'.join(text)+'\n')
     runtime_lines = ['# Measured wall times', '', '| Run | Job wall time (s) | Jobs | Workers |', '|---|---:|---:|---:|']
     for mode in ['demo', 'full']:
-        p = ROOT/f'results/{mode}/run_manifest.json'
+        cold = ROOT/f'results/{mode}/cold_run_manifest.json'
+        p = cold if cold.exists() else ROOT/f'results/{mode}/run_manifest.json'
         if p.exists():
             manifest = json.loads(p.read_text())
             runtime_lines.append(f"| {mode} | {manifest['elapsed_seconds']:.2f} | {manifest['jobs']} | {manifest['workers']} |")
-    runtime_lines += ['', f"Verification (tests, cached demo replay and rendering): {record['runtime_seconds']:.2f} s.",
+    runtime_lines += ['', f"Verification (tests, demo invocation and rendering): {record['runtime_seconds']:.2f} s.",
                       'Job times exclude figure and animation rendering. Resumed runs can reuse cached jobs.']
+    cold_demo = ROOT/'results/demo_wall_time.json'
+    if cold_demo.exists():
+        cold_record = json.loads(cold_demo.read_text())
+        runtime_lines.append(f"Measured cold demo including rendering: {cold_record['elapsed_seconds']:.2f} s; exit={cold_record['exit_code']}.")
     (ROOT/'results/RUNTIMES.md').write_text('\n'.join(runtime_lines)+'\n')
     sys.exit(0 if passed else 1)
 

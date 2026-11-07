@@ -1,0 +1,9 @@
+metric,comparison,statistic,p_value
+completion_time,centralized vs auction,-0.9073359548867688,0.3748288326834897
+completion_time,centralized vs admm,-0.9073359548867688,0.3748288326834897
+energy,centralized vs auction,-4.8187630575044995,3.239460911419624e-05
+energy,centralized vs admm,-4.8187630575044995,3.239460911419624e-05
+messages,centralized vs auction,-0.18791400119311258,0.8528044034686462
+messages,centralized vs admm,-0.18791400119311258,0.8528044034686462
+fairness,centralized vs auction,-0.9547509680170599,0.3515837740586714
+fairness,centralized vs admm,-0.9547509680170599,0.3515837740586714

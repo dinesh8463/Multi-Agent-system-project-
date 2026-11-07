@@ -41,7 +41,7 @@ evaluation_seeds:
 - 3020
 f_local: 1
 failure_fraction: 0.1
-frame_stride: 3
+frame_stride: 1
 h_timeout: 5
 method: auction
 mission_mode: coverage_and_rescue

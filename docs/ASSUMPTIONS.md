@@ -92,8 +92,12 @@
   Earlier 1001/2001-series measurements are development pilots, preserved under
   results/pilot*/. Pilot correctness defects motivated
   majority leases and the reachable-ball safety controller. The objective weights
-  were not changed to favor a method. Final holdout measurements use the frozen
-  corrected policy and are not mixed with pilot rows.
+  were not changed to favor a method. Final evaluation measurements use the frozen
+  corrected policy and are not mixed with pilot rows. Some pre-audit allocation
+  smoke checks also used 3001-series scenarios; this is a fixed-seed course
+  evaluation, not a completely blind/preregistered holdout. Objective weights
+  were never selected from those outcomes; calibration used the separate 41-43
+  seeds, and every final-source condition was freshly rerun.
 - The animation is an explicitly selected replay of evaluation case Experiment 2,
   failure_10, seed 3004. It is chosen to show a real nonempty-task recovery, not to
   summarize the seed distribution. Only frame sampling changes; all scientific

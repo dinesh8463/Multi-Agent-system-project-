@@ -48,7 +48,8 @@ def experiment_figures(frame: pd.DataFrame, summary: pd.DataFrame, folder: Path)
             s = summary[(summary.experiment == experiment) & (summary.metric == metric)].set_index('condition').loc[labels]
             x = np.arange(len(labels))
             ax.errorbar(x, s['mean'], yerr=np.vstack([s['mean']-s.ci_low, s.ci_high-s['mean']]),
-                        fmt='o-', capsize=3, color='#16657b', label='Mean and 95% t CI')
+                        fmt='o-', capsize=3, color='#16657b',
+                        label='Observed value (single seed)' if data.seed.nunique() == 1 else 'Mean and 95% t CI')
             ax.fill_between(x, s.ci_low, s.ci_high, alpha=.12, color='#16657b')
             display = [label.replace('_', '\n') if len(labels) <= 4 else label.replace('_', ' ') for label in labels]
             ax.set_xticks(x, display, rotation=40, ha='right', fontsize=8)
@@ -58,13 +59,20 @@ def experiment_figures(frame: pd.DataFrame, summary: pd.DataFrame, folder: Path)
         count = data.seed.nunique()
         fig.suptitle(f'Experiment {experiment} | {count} scenario {"seed" if count == 1 else "seeds"}')
         save(fig, folder/f'exp{experiment}.png')
-    fig, ax = plt.subplots(figsize=(6.5, 3))
-    data = summary[summary.metric == 'success']
-    for experiment, group in data.groupby('experiment'):
-        ax.plot(np.full(len(group), experiment), group['mean'], 'o', label=f'Experiment {experiment}')
-    ax.set(xlabel='Experiment', ylabel='Mission success fraction', ylim=(-.05, 1.05))
-    ax.legend(ncol=4, fontsize=8, loc='lower center')
-    ax.grid(alpha=.2)
+    fig, ax = plt.subplots(figsize=(6.5, 8.5))
+    data = summary[summary.metric == 'success'].sort_values(['experiment', 'condition'])
+    y = np.arange(len(data))
+    colors = [plt.cm.tab10(int(e)-1) for e in data.experiment]
+    ax.barh(y, data['mean'], color=colors, alpha=.8)
+    ax.errorbar(data['mean'], y, xerr=np.vstack([data['mean']-data.ci_low, data.ci_high-data['mean']]),
+                fmt='none', ecolor='#333333', capsize=2)
+    ax.set_yticks(y, [f'E{int(e)} {c.replace("_", " ")}' for e, c in zip(data.experiment, data.condition)], fontsize=8)
+    ax.invert_yaxis()
+    interval_label = ('Bars: observed values (single seed)' if frame.seed.nunique() == 1
+                      else 'Bars: means; whiskers: 95% t confidence intervals')
+    ax.set(xlabel='Mission success fraction', xlim=(-.02, 1.1),
+           title=f'Observed success across all conditions\n{interval_label}')
+    ax.grid(axis='x', alpha=.2)
     save(fig, folder/'summary_comparison.png')
 
 
@@ -195,21 +203,53 @@ def mission_media(cfg: dict, output: Path, figures: Path, live: bool = False) ->
     snapshots = result['snapshots']
     if not snapshots:
         raise RuntimeError('No animation frames')
+    link_records, previous_edges = [], set()
+    for snapshot in snapshots:
+        t = snapshot['t']
+        before = result['trajectories'][t-1] if t else result['trajectories'][0]
+        ids = np.flatnonzero(snapshot['alive'])
+        eligible = {(int(i), int(j)) for i in ids for j in ids if j > i
+                    and np.linalg.norm(before[i]-before[j]) <= local['comm_range']}
+        edges = {tuple(edge) for edge in snapshot['edges']}
+        losses = (previous_edges-edges) & eligible
+        link_records.append(dict(t=t, eligible_edges=len(eligible), realized_edges=len(edges),
+                                 link_failures=len(eligible-edges), visible_link_losses=len(losses),
+                                 lost_edges=';'.join(f'{i}-{j}' for i, j in sorted(losses))))
+        previous_edges = edges
+    pd.DataFrame(link_records).to_csv(output/'mission_link_events.csv', index=False)
     images = []
+    handoff = next(f for f in result['failures'] if f['tasks'] and f['recovered'] is not None)
+    resumed = next(s for s in snapshots if s['t'] == handoff['recovered'])
+    new_owners = sorted({resumed['tasks'].index(task) for task in handoff['tasks']})
     writer = imageio.get_writer(str(output/'mission.mp4'), fps=8, codec='libx264', quality=7)
     for snapshot in snapshots:
         fig, (ax, panel) = plt.subplots(1, 2, figsize=(6.4, 4.8), dpi=100, gridspec_kw={'width_ratios': [3, 1]})
         draw_world(ax, geom, survivors, snapshot)
+        if handoff['recovered'] <= snapshot['t'] <= handoff['recovered']+4:
+            points = snapshot['positions'][new_owners]
+            ax.scatter(points[:, 0], points[:, 1], s=130, facecolors='none', edgecolors='#00af60', linewidths=2, zorder=8)
         panel.set_axis_off()
         text = (f"t = {snapshot['t']} s\n\nCoverage\n{snapshot['coverage']:.1%}\n\nMessages / step\n{snapshot['messages']}"
                 f"\n\nConsensus error\n{snapshot['consensus_error']:.3f}\n\nAlive\n{int(snapshot['alive'].sum())}/{len(snapshot['alive'])}"
                 f"\n\nRescued\n{len(snapshot['rescued'])}/{len(survivors)}")
         panel.text(0, .97, text, va='top', fontsize=9)
+        if snapshot['t'] < handoff['time']:
+            phase = 'Search in progress'
+        elif snapshot['t'] < (handoff['detection'] if handoff['detection'] is not None else local['steps']):
+            phase = f"D{handoff['drone']} crashed\nAwaiting detection"
+        elif snapshot['t'] < handoff['recovered']:
+            phase = f"D{handoff['drone']} suspected\nReallocation pending"
+        else:
+            phase = f"Task resumed at {handoff['recovered']}\nNew owner: "+','.join(f'D{i}' for i in new_owners)
+        panel.text(0, .03, phase, va='bottom', fontsize=8, color='#16657b')
         fig.suptitle('Distributed response | task colors; numbers: battery; red X: crash', fontsize=9)
         fig.canvas.draw()
         rgb = np.asarray(fig.canvas.buffer_rgba())[:, :, :3].copy()
-        writer.append_data(rgb)
-        images.append(Image.fromarray(rgb).quantize(colors=128))
+        repeat = 4 if snapshot['t'] in [handoff['recovered'], handoff['recovered']+1] else 1
+        frame = Image.fromarray(rgb).quantize(colors=128)
+        for _ in range(repeat):
+            writer.append_data(rgb)
+            images.append(frame)
         plt.close(fig)
     writer.close()
     images[0].save(output/'mission.gif', save_all=True, append_images=images[1:], duration=125, loop=0, optimize=True)

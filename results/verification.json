@@ -1,0 +1,243 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "pytest",
+      "pass": true,
+      "detail": "31 passed in 22.77s",
+      "category": "gate"
+    },
+    {
+      "name": "decentralization_grep",
+      "pass": true,
+      "detail": "forbidden policy imports=[]",
+      "category": "gate"
+    },
+    {
+      "name": "make_demo",
+      "pass": true,
+      "detail": "demo process exit=0",
+      "category": "gate"
+    },
+    {
+      "name": "demo_runtime",
+      "pass": true,
+      "detail": "149.05s (budget <300s; matching cached experiment jobs may be reused)",
+      "category": "gate"
+    },
+    {
+      "name": "figures_results/figures",
+      "pass": true,
+      "detail": "missing=[]",
+      "category": "gate"
+    },
+    {
+      "name": "figure_resolution_results/figures",
+      "pass": true,
+      "detail": "300dpi and width<=6.5in: violations=[]",
+      "category": "gate"
+    },
+    {
+      "name": "figures_results/demo/figures",
+      "pass": true,
+      "detail": "missing=[]",
+      "category": "gate"
+    },
+    {
+      "name": "figure_resolution_results/demo/figures",
+      "pass": true,
+      "detail": "300dpi and width<=6.5in: violations=[]",
+      "category": "gate"
+    },
+    {
+      "name": "animation_formats",
+      "pass": true,
+      "detail": "GIF frames=115, bytes=2033081; MP4 frames=121, shape=(480, 640, 3)",
+      "category": "gate"
+    },
+    {
+      "name": "animation_failure_and_recovery",
+      "pass": true,
+      "detail": "2 physical crashes; 2 recovered",
+      "category": "gate"
+    },
+    {
+      "name": "animation_visible_link_failure",
+      "pass": true,
+      "detail": "20 previously visible radio edges fail while endpoints remain in range before non-vacuous recovery",
+      "category": "gate"
+    },
+    {
+      "name": "animation_source_equivalence",
+      "pass": true,
+      "detail": "all scientific metrics match results/full/jobs/exp2_failure_10_3004.json; illustration is selected, not a distribution summary",
+      "category": "gate"
+    },
+    {
+      "name": "exp1_seeds",
+      "pass": true,
+      "detail": "60 rows, 3 conditions, expected 20 unique seeds each",
+      "category": "gate"
+    },
+    {
+      "name": "exp2_seeds",
+      "pass": true,
+      "detail": "80 rows, 4 conditions, expected 20 unique seeds each",
+      "category": "gate"
+    },
+    {
+      "name": "exp3_seeds",
+      "pass": true,
+      "detail": "60 rows, 3 conditions, expected 20 unique seeds each",
+      "category": "gate"
+    },
+    {
+      "name": "exp4_seeds",
+      "pass": true,
+      "detail": "40 rows, 2 conditions, expected 20 unique seeds each",
+      "category": "gate"
+    },
+    {
+      "name": "exp5_seeds",
+      "pass": true,
+      "detail": "80 rows, 4 conditions, expected 20 unique seeds each",
+      "category": "gate"
+    },
+    {
+      "name": "exp6_seeds",
+      "pass": true,
+      "detail": "80 rows, 4 conditions, expected 20 unique seeds each",
+      "category": "gate"
+    },
+    {
+      "name": "exp7_seeds",
+      "pass": true,
+      "detail": "180 rows, 9 conditions, expected 20 unique seeds each",
+      "category": "gate"
+    },
+    {
+      "name": "aggregate_and_summary_integrity",
+      "pass": true,
+      "detail": "aggregate matches all seven CSVs; 580 rows; summary covers required metrics and repetitions",
+      "category": "gate"
+    },
+    {
+      "name": "boundary_fix_provenance",
+      "pass": true,
+      "detail": "580 old/new cases use identical parameters; 1 have changed scientific measurements; see boundary_fix_changes.csv",
+      "category": "gate"
+    },
+    {
+      "name": "source_fingerprints",
+      "pass": true,
+      "detail": "stale jobs=[]",
+      "category": "gate"
+    },
+    {
+      "name": "current_sweep_configurations",
+      "pass": true,
+      "detail": "mismatched job configurations=[]",
+      "category": "gate"
+    },
+    {
+      "name": "paired_scenarios",
+      "pass": true,
+      "detail": "120 paired scenario groups checked, including batteries/positions; identical intervention schedules across method comparisons",
+      "category": "gate"
+    },
+    {
+      "name": "transport_optimization_regression",
+      "pass": true,
+      "detail": "current-policy seed-41 end-to-end reference-bus regression passed; 0 additional matching archived episodes compared; differences=[]",
+      "category": "gate"
+    },
+    {
+      "name": "coverage_monotonic",
+      "pass": true,
+      "detail": "Checked every saved episode prefix",
+      "category": "gate"
+    },
+    {
+      "name": "zero_failure_success",
+      "pass": true,
+      "detail": "100.0% (required >=90%)",
+      "category": "gate"
+    },
+    {
+      "name": "failure_trend_failure_0_failure_10",
+      "pass": true,
+      "detail": "paired time delta 24.300 +/- 20.482s; success delta 0.000 +/- 0.000; statistical noise allowed",
+      "category": "scientific"
+    },
+    {
+      "name": "failure_trend_failure_10_failure_20",
+      "pass": true,
+      "detail": "paired time delta 49.650 +/- 44.733s; success delta -0.200 +/- 0.192; statistical noise allowed",
+      "category": "scientific"
+    },
+    {
+      "name": "failure_trend_failure_20_failure_30",
+      "pass": true,
+      "detail": "paired time delta 12.000 +/- 52.762s; success delta 0.000 +/- 0.263; statistical noise allowed",
+      "category": "scientific"
+    },
+    {
+      "name": "healing_recovery",
+      "pass": false,
+      "detail": "ON=0.938, OFF=0.963",
+      "category": "scientific"
+    },
+    {
+      "name": "wmsr_bound",
+      "pass": true,
+      "detail": "{'ordinary_bias': 9.49731794529882, 'ordinary_random': 3.2795201141943813, 'wmsr_bias': 0.0435157789672599, 'wmsr_random': 0.016063135728566207}",
+      "category": "gate"
+    },
+    {
+      "name": "spectral_rate",
+      "pass": true,
+      "detail": "relative curve tolerance 1e-5, absolute 1e-10",
+      "category": "gate"
+    },
+    {
+      "name": "scaling_communication",
+      "pass": true,
+      "detail": "{10: 22.71828033813595, 20: 80.66863960974288, 50: 503.48802022753944, 100: 1782.318191860791}",
+      "category": "scientific"
+    },
+    {
+      "name": "strong_task_ownership",
+      "pass": true,
+      "detail": "0 duplicate task execution steps; execution requires a majority lease",
+      "category": "gate"
+    },
+    {
+      "name": "hard_separation",
+      "pass": true,
+      "detail": "0 pair-step violations; all measured live pair distances must exceed d_min",
+      "category": "gate"
+    },
+    {
+      "name": "scientific_exceptions_explained",
+      "pass": true,
+      "detail": "failed scientific checks=['healing_recovery']; completion-gate item 4 requires data-backed investigation in FINDINGS",
+      "category": "gate"
+    },
+    {
+      "name": "documentation",
+      "pass": true,
+      "detail": "README and required scientific documentation",
+      "category": "gate"
+    },
+    {
+      "name": "report_and_slides_untouched",
+      "pass": true,
+      "detail": "Neither report nor slides was created",
+      "category": "gate"
+    }
+  ],
+  "scientific_failures": [
+    "healing_recovery"
+  ],
+  "runtime_seconds": 181.51463029999286
+}

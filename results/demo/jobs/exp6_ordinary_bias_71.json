@@ -1,12 +1,12 @@
 {
-  "fingerprint": "99b24d56e86809f7",
+  "fingerprint": "d69b5ff1af57f492",
   "config": {
     "size": 100,
     "cell": 2,
     "regions": 25,
     "survivors": 9,
     "n": 7,
-    "steps": 180,
+    "steps": 120,
     "v_max": 2.0,
     "sense_radius": 6.0,
     "comm_range": 150,
@@ -54,35 +54,35 @@
   "metrics": {
     "seed": 71,
     "n": 7,
-    "completion_time": 157,
-    "success": 1,
-    "timeout": 0,
-    "coverage": 0.9995633187772925,
-    "detection_rate": 1.0,
-    "rescue_rate": 1.0,
-    "fairness": 0.9996625834969417,
-    "energy": 65.96169259812689,
-    "messages": 6594,
+    "completion_time": 120,
+    "success": 0,
+    "timeout": 1,
+    "coverage": 0.9506550218340611,
+    "detection_rate": 0.8888888888888888,
+    "rescue_rate": 0.7777777777777778,
+    "fairness": 0.9996058365886415,
+    "energy": 50.332773416486816,
+    "messages": 5040,
     "messages_per_step": 42.0,
-    "delivered": 6594,
-    "consensus_error": 4.0038641050911,
+    "delivered": 5040,
+    "consensus_error": 0.9554697146751866,
     "recovery_time": 0.0,
     "recovery_rate": 1.0,
     "false_positives": 0,
     "true_positives": 0,
     "false_negatives": 0,
     "safety_violations": 0,
-    "separation_robustness": 1.4201270319423989,
+    "separation_robustness": 1.9245439656192467,
     "response_violations": 0,
-    "response_robustness": 0.24324016829770434,
-    "pending_response_windows": 2,
+    "response_robustness": -999998.5,
+    "pending_response_windows": 5,
     "ownership_conflict_steps": 0,
     "failures": 0,
     "scheduled_failures": 0,
     "admm_fallbacks": 0,
-    "allocation_rounds": 123,
+    "allocation_rounds": 99,
     "relay_steps": 0,
-    "runtime_seconds": 4.309323499997845,
+    "runtime_seconds": 2.08451350001269,
     "experiment": 6,
     "condition": "ordinary_bias",
     "controlled_fault_error": 9.530358672328413,
@@ -96,7 +96,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 1.133474734872115,
+      "consensus_error": 0.11347473487211476,
       "separation_robustness": 17.697715603592208,
       "fiedler": 6.9999999999999964
     },
@@ -107,7 +107,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 2.0196248917208806,
+      "consensus_error": 0.2750580607788966,
       "separation_robustness": 17.697715603592208,
       "fiedler": NaN
     },
@@ -118,7 +118,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 2.666324616901155,
+      "consensus_error": 0.4094607629349306,
       "separation_robustness": 17.697715603592208,
       "fiedler": NaN
     },
@@ -129,7 +129,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 3.138276837770217,
+      "consensus_error": 0.5212550105497175,
       "separation_robustness": 18.09975124224178,
       "fiedler": NaN
     },
@@ -140,7 +140,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 3.4700807390496293,
+      "consensus_error": 0.6016237813187725,
       "separation_robustness": 16.75661604370818,
       "fiedler": NaN
     },
@@ -151,7 +151,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 3.7078433919492344,
+      "consensus_error": 0.6656046930011469,
       "separation_robustness": 18.903030446494338,
       "fiedler": NaN
     },
@@ -162,7 +162,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 3.8777221550966563,
+      "consensus_error": 0.7170122778695021,
       "separation_robustness": 19.29068835408182,
       "fiedler": NaN
     },
@@ -173,7 +173,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.003417929577218,
+      "consensus_error": 0.7634974193562042,
       "separation_robustness": 18.167169390152335,
       "fiedler": NaN
     },
@@ -184,7 +184,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.095591143451749,
+      "consensus_error": 0.8041197397642816,
       "separation_robustness": 17.531186107496417,
       "fiedler": NaN
     },
@@ -195,7 +195,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.157676178788538,
+      "consensus_error": 0.8339743077442633,
       "separation_robustness": 14.433517313502527,
       "fiedler": NaN
     },
@@ -206,7 +206,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.203959560754302,
+      "consensus_error": 0.861474097421449,
       "separation_robustness": 14.37416267984895,
       "fiedler": NaN
     },
@@ -217,7 +217,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.234676935926362,
+      "consensus_error": 0.8826246983668949,
       "separation_robustness": 13.381929062442667,
       "fiedler": NaN
     },
@@ -228,7 +228,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.255309196584017,
+      "consensus_error": 0.8999470356389552,
       "separation_robustness": 12.094597877925494,
       "fiedler": NaN
     },
@@ -239,7 +239,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.268952663781425,
+      "consensus_error": 0.9144562569162755,
       "separation_robustness": 10.773751537304271,
       "fiedler": NaN
     },
@@ -250,7 +250,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.278661841790628,
+      "consensus_error": 0.9277470594510034,
       "separation_robustness": 7.904161676406231,
       "fiedler": NaN
     },
@@ -261,7 +261,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.282369201685788,
+      "consensus_error": 0.9367156026741384,
       "separation_robustness": 7.062377347975687,
       "fiedler": NaN
     },
@@ -272,7 +272,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.284403476169628,
+      "consensus_error": 0.9450186154800807,
       "separation_robustness": 5.057813243446807,
       "fiedler": NaN
     },
@@ -283,7 +283,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.2861166008639255,
+      "consensus_error": 0.9535342691808512,
       "separation_robustness": 4.936207252198395,
       "fiedler": NaN
     },
@@ -294,7 +294,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.286744294518129,
+      "consensus_error": 0.9611530266050909,
       "separation_robustness": 4.608619586626035,
       "fiedler": NaN
     },
@@ -305,7 +305,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.284828951551467,
+      "consensus_error": 0.966185770995923,
       "separation_robustness": 4.1047019532288305,
       "fiedler": NaN
     },
@@ -316,7 +316,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.285354399295792,
+      "consensus_error": 0.9734977936505562,
       "separation_robustness": 8.018271071976232,
       "fiedler": 6.9999999999999964
     },
@@ -327,7 +327,7 @@
       "rescued": 0,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.288504738163309,
+      "consensus_error": 0.9831484509722104,
       "separation_robustness": 11.964546072239875,
       "fiedler": NaN
     },
@@ -338,7 +338,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.289270310775898,
+      "consensus_error": 0.9899985620554734,
       "separation_robustness": 11.878572111803837,
       "fiedler": NaN
     },
@@ -349,7 +349,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.288509208119212,
+      "consensus_error": 0.9948665363150784,
       "separation_robustness": 12.17042486820877,
       "fiedler": NaN
     },
@@ -360,7 +360,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.288013685175317,
+      "consensus_error": 0.999554605965097,
       "separation_robustness": 12.46268113986154,
       "fiedler": NaN
     },
@@ -371,7 +371,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.284847536839954,
+      "consensus_error": 1.00113950888963,
       "separation_robustness": 12.755316949690055,
       "fiedler": NaN
     },
@@ -382,7 +382,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.282386864632465,
+      "consensus_error": 1.0030649513579293,
       "separation_robustness": 15.424173684835985,
       "fiedler": NaN
     },
@@ -393,7 +393,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.278318955231605,
+      "consensus_error": 1.0030624831911874,
       "separation_robustness": 18.19630869862093,
       "fiedler": NaN
     },
@@ -404,7 +404,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.2743528419596695,
+      "consensus_error": 1.0029093073107784,
       "separation_robustness": 20.965461131618433,
       "fiedler": NaN
     },
@@ -415,7 +415,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.267491585733981,
+      "consensus_error": 0.9996613425926977,
       "separation_robustness": 20.302276912125244,
       "fiedler": NaN
     },
@@ -426,7 +426,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.2621805024019634,
+      "consensus_error": 0.9978585154705738,
       "separation_robustness": 18.565791244313505,
       "fiedler": NaN
     },
@@ -437,7 +437,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.256302303869731,
+      "consensus_error": 0.9954256994691068,
       "separation_robustness": 17.336229987335425,
       "fiedler": NaN
     },
@@ -448,7 +448,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.249162884044879,
+      "consensus_error": 0.9917106019659276,
       "separation_robustness": 15.2490239181971,
       "fiedler": NaN
     },
@@ -459,7 +459,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.241635419731633,
+      "consensus_error": 0.9876394637603085,
       "separation_robustness": 11.991645700854775,
       "fiedler": NaN
     },
@@ -470,7 +470,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.237802744884019,
+      "consensus_error": 0.9873392377438969,
       "separation_robustness": 8.742519917355596,
       "fiedler": NaN
     },
@@ -481,7 +481,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.231200067868348,
+      "consensus_error": 0.984308322516481,
       "separation_robustness": 7.524703846621261,
       "fiedler": NaN
     },
@@ -492,7 +492,7 @@
       "rescued": 1,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.225920205985995,
+      "consensus_error": 0.9826621725503158,
       "separation_robustness": 6.597157037192762,
       "fiedler": NaN
     },
@@ -503,7 +503,7 @@
       "rescued": 2,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.223990275890203,
+      "consensus_error": 0.984418786291575,
       "separation_robustness": 7.318083859106059,
       "fiedler": NaN
     },
@@ -514,7 +514,7 @@
       "rescued": 2,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.223121640851022,
+      "consensus_error": 0.9872214596062614,
       "separation_robustness": 7.533083395538432,
       "fiedler": NaN
     },
@@ -525,7 +525,7 @@
       "rescued": 2,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.220639251792779,
+      "consensus_error": 0.988327792401533,
       "separation_robustness": 7.543214611466119,
       "fiedler": NaN
     },
@@ -536,7 +536,7 @@
       "rescued": 2,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.2183063982984415,
+      "consensus_error": 0.9894839880337275,
       "separation_robustness": 6.715031106556307,
       "fiedler": 6.9999999999999964
     },
@@ -547,7 +547,7 @@
       "rescued": 3,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.2176198852008975,
+      "consensus_error": 0.9921743288551095,
       "separation_robustness": 7.2262445627551735,
       "fiedler": NaN
     },
@@ -558,7 +558,7 @@
       "rescued": 3,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.217654966333544,
+      "consensus_error": 0.9954381608326778,
       "separation_robustness": 9.601315213913177,
       "fiedler": NaN
     },
@@ -569,7 +569,7 @@
       "rescued": 4,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.215404710276303,
+      "consensus_error": 0.9962334437564898,
       "separation_robustness": 12.713666770061106,
       "fiedler": NaN
     },
@@ -580,7 +580,7 @@
       "rescued": 4,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.214193603493604,
+      "consensus_error": 0.9979050859740017,
       "separation_robustness": 12.528820825974819,
       "fiedler": NaN
     },
@@ -591,7 +591,7 @@
       "rescued": 5,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.20981536953798,
+      "consensus_error": 0.9962465634099501,
       "separation_robustness": 11.499247901863733,
       "fiedler": NaN
     },
@@ -602,7 +602,7 @@
       "rescued": 5,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.205304102121156,
+      "consensus_error": 0.994352679937034,
       "separation_robustness": 10.967356027187401,
       "fiedler": NaN
     },
@@ -613,7 +613,7 @@
       "rescued": 5,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.201385611542157,
+      "consensus_error": 0.9929974308644692,
       "separation_robustness": 10.467012094559006,
       "fiedler": NaN
     },
@@ -624,7 +624,7 @@
       "rescued": 5,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.19683867923453,
+      "consensus_error": 0.9909846269099921,
       "separation_robustness": 8.673476696048445,
       "fiedler": NaN
     },
@@ -635,7 +635,7 @@
       "rescued": 5,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.192470486567148,
+      "consensus_error": 0.989151328603871,
       "separation_robustness": 6.967709796614624,
       "fiedler": NaN
     },
@@ -646,7 +646,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.189717451692998,
+      "consensus_error": 0.9889520566888914,
       "separation_robustness": 5.410569020763964,
       "fiedler": NaN
     },
@@ -657,7 +657,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.185383684873345,
+      "consensus_error": 0.9871743276146445,
       "separation_robustness": 5.845686878761214,
       "fiedler": NaN
     },
@@ -668,7 +668,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.180799878294564,
+      "consensus_error": 0.9851653821963852,
       "separation_robustness": 7.192289940086367,
       "fiedler": NaN
     },
@@ -679,7 +679,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.176352279989595,
+      "consensus_error": 0.9833273395290115,
       "separation_robustness": 9.124149785068875,
       "fiedler": NaN
     },
@@ -690,7 +690,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.170890547419119,
+      "consensus_error": 0.9805179142104531,
       "separation_robustness": 12.208504084046512,
       "fiedler": NaN
     },
@@ -701,7 +701,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.166758302421298,
+      "consensus_error": 0.9791037194056725,
       "separation_robustness": 14.410291984391787,
       "fiedler": NaN
     },
@@ -712,7 +712,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.16449614250374,
+      "consensus_error": 0.97961627699866,
       "separation_robustness": 12.835753488181807,
       "fiedler": NaN
     },
@@ -723,7 +723,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.1605206092149105,
+      "consensus_error": 0.978430637540147,
       "separation_robustness": 10.724763197561588,
       "fiedler": NaN
     },
@@ -734,7 +734,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.15842531058511,
+      "consensus_error": 0.9791412580416402,
       "separation_robustness": 8.380654597408386,
       "fiedler": NaN
     },
@@ -745,7 +745,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.15647994079813,
+      "consensus_error": 0.979984213514015,
       "separation_robustness": 6.1655218461625925,
       "fiedler": NaN
     },
@@ -756,7 +756,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.156552377456581,
+      "consensus_error": 0.9828010923577328,
       "separation_robustness": 5.423970281504729,
       "fiedler": 6.9999999999999964
     },
@@ -767,7 +767,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.155071741007025,
+      "consensus_error": 0.9839669641284553,
       "separation_robustness": 6.005230383639061,
       "fiedler": NaN
     },
@@ -778,7 +778,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.154156103222692,
+      "consensus_error": 0.9855915854885129,
       "separation_robustness": 8.775337714750586,
       "fiedler": NaN
     },
@@ -789,7 +789,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.151901888838868,
+      "consensus_error": 0.9857578006800203,
       "separation_robustness": 11.663577576046904,
       "fiedler": NaN
     },
@@ -800,7 +800,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.14851331441144,
+      "consensus_error": 0.9846870729452317,
       "separation_robustness": 11.365943532564746,
       "fiedler": NaN
     },
@@ -811,7 +811,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.146737667540625,
+      "consensus_error": 0.9851618655204037,
       "separation_robustness": 11.79562219508438,
       "fiedler": NaN
     },
@@ -822,7 +822,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.146720272483197,
+      "consensus_error": 0.9873251941960661,
       "separation_robustness": 12.283276135043977,
       "fiedler": NaN
     },
@@ -833,7 +833,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.146021426851849,
+      "consensus_error": 0.9887057180251466,
       "separation_robustness": 12.51641440305396,
       "fiedler": NaN
     },
@@ -844,7 +844,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.145515131083994,
+      "consensus_error": 0.9901695202078129,
       "separation_robustness": 13.218650298284414,
       "fiedler": NaN
     },
@@ -855,7 +855,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.145573029816377,
+      "consensus_error": 0.992081725011159,
       "separation_robustness": 14.823851517199877,
       "fiedler": NaN
     },
@@ -866,7 +866,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.145034123159753,
+      "consensus_error": 0.9932692752638437,
       "separation_robustness": 14.096332179527714,
       "fiedler": NaN
     },
@@ -877,7 +877,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.142893644016847,
+      "consensus_error": 0.9927325772590355,
       "separation_robustness": 11.765504560645779,
       "fiedler": NaN
     },
@@ -888,7 +888,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.140859095025174,
+      "consensus_error": 0.9922145749967424,
       "separation_robustness": 9.242794564961876,
       "fiedler": NaN
     },
@@ -899,7 +899,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.138530673305282,
+      "consensus_error": 0.9913409445466898,
       "separation_robustness": 7.425289327209857,
       "fiedler": NaN
     },
@@ -910,7 +910,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.13704882926315,
+      "consensus_error": 0.9912770909318092,
       "separation_robustness": 5.741424519935684,
       "fiedler": NaN
     },
@@ -921,7 +921,7 @@
       "rescued": 6,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.134062721923015,
+      "consensus_error": 0.9896756315574892,
       "separation_robustness": 5.180412756230997,
       "fiedler": NaN
     },
@@ -932,7 +932,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.132367096707493,
+      "consensus_error": 0.9893616516071473,
       "separation_robustness": 4.157607719052975,
       "fiedler": NaN
     },
@@ -943,7 +943,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.13065719575697,
+      "consensus_error": 0.9890289030408727,
       "separation_robustness": 4.089902911691152,
       "fiedler": NaN
     },
@@ -954,7 +954,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.128194518500378,
+      "consensus_error": 0.9879381849293856,
       "separation_robustness": 6.416191314294203,
       "fiedler": NaN
     },
@@ -965,7 +965,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.125819843285623,
+      "consensus_error": 0.9869434489838171,
       "separation_robustness": 9.988196237948957,
       "fiedler": NaN
     },
@@ -976,7 +976,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.120911137428718,
+      "consensus_error": 0.9834302963575764,
       "separation_robustness": 8.557725841631651,
       "fiedler": 6.9999999999999964
     },
@@ -987,7 +987,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.11898217151092,
+      "consensus_error": 0.982963190408057,
       "separation_robustness": 9.090914167812587,
       "fiedler": NaN
     },
@@ -998,7 +998,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.117739349285371,
+      "consensus_error": 0.9832295242286705,
       "separation_robustness": 9.436930082332546,
       "fiedler": NaN
     },
@@ -1009,7 +1009,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.115617539409711,
+      "consensus_error": 0.9826371142882774,
       "separation_robustness": 9.03713543791217,
       "fiedler": NaN
     },
@@ -1020,7 +1020,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.112006908182821,
+      "consensus_error": 0.9805721478035311,
       "separation_robustness": 9.395967724452122,
       "fiedler": NaN
     },
@@ -1031,7 +1031,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.108955670314096,
+      "consensus_error": 0.9791064096719948,
       "separation_robustness": 9.00808052479026,
       "fiedler": NaN
     },
@@ -1042,7 +1042,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.105251627930193,
+      "consensus_error": 0.977033517842906,
       "separation_robustness": 6.795695351521246,
       "fiedler": NaN
     },
@@ -1053,7 +1053,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.102450903651553,
+      "consensus_error": 0.9759244127259096,
       "separation_robustness": 7.675167376860083,
       "fiedler": NaN
     },
@@ -1064,7 +1064,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.1004143986641335,
+      "consensus_error": 0.975632879300763,
       "separation_robustness": 6.4773502779612055,
       "fiedler": NaN
     },
@@ -1075,7 +1075,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.096813526404767,
+      "consensus_error": 0.9738102237666066,
       "separation_robustness": 6.993307437425557,
       "fiedler": NaN
     },
@@ -1086,7 +1086,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.092232199012647,
+      "consensus_error": 0.9710533664284244,
       "separation_robustness": 6.655801170482507,
       "fiedler": NaN
     },
@@ -1097,7 +1097,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.0890049377431374,
+      "consensus_error": 0.969722666101532,
       "separation_robustness": 5.812224488943595,
       "fiedler": NaN
     },
@@ -1108,7 +1108,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.085438624392718,
+      "consensus_error": 0.9681173681554229,
       "separation_robustness": 5.234824539525071,
       "fiedler": NaN
     },
@@ -1119,7 +1119,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.083057096513184,
+      "consensus_error": 0.9677604261531212,
       "separation_robustness": 6.91769651689121,
       "fiedler": NaN
     },
@@ -1130,7 +1130,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.080584156990712,
+      "consensus_error": 0.9673521731829877,
       "separation_robustness": 6.492262506011805,
       "fiedler": NaN
     },
@@ -1141,7 +1141,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.077673327517801,
+      "consensus_error": 0.9665300614435245,
       "separation_robustness": 5.674734594490955,
       "fiedler": NaN
     },
@@ -1152,7 +1152,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.075503974011262,
+      "consensus_error": 0.966469291173348,
       "separation_robustness": 5.779565863278063,
       "fiedler": NaN
     },
@@ -1163,7 +1163,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.0732383716364104,
+      "consensus_error": 0.9663153434555279,
       "separation_robustness": 5.48632121447233,
       "fiedler": NaN
     },
@@ -1174,7 +1174,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.071273707251749,
+      "consensus_error": 0.9664550711071657,
       "separation_robustness": 5.200315691405133,
       "fiedler": NaN
     },
@@ -1185,7 +1185,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.068467621316583,
+      "consensus_error": 0.9657334904544085,
       "separation_robustness": 4.963719394725342,
       "fiedler": NaN
     },
@@ -1196,7 +1196,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.06716956154743,
+      "consensus_error": 0.966506652421155,
       "separation_robustness": 4.738928753102906,
       "fiedler": 6.9999999999999964
     },
@@ -1207,7 +1207,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.064212586701681,
+      "consensus_error": 0.9655855029771542,
       "separation_robustness": 4.527163614363033,
       "fiedler": NaN
     },
@@ -1218,7 +1218,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.0631755894004415,
+      "consensus_error": 0.9665638455136282,
       "separation_robustness": 4.329731442666162,
       "fiedler": NaN
     },
@@ -1229,7 +1229,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.06157516665349,
+      "consensus_error": 0.9669348532908357,
       "separation_robustness": 4.1480132239800005,
       "fiedler": NaN
     },
@@ -1240,7 +1240,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.059139889704618,
+      "consensus_error": 0.9664215558156388,
       "separation_robustness": 3.9834408367204244,
       "fiedler": NaN
     },
@@ -1251,7 +1251,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.05673271552173,
+      "consensus_error": 0.9658991562699135,
       "separation_robustness": 3.837464609672475,
       "fiedler": NaN
     },
@@ -1262,7 +1262,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.053974871296688,
+      "consensus_error": 0.9649980067126511,
       "separation_robustness": 3.8420593489281734,
       "fiedler": NaN
     },
@@ -1273,7 +1273,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.05016625968458,
+      "consensus_error": 0.9630315063913476,
       "separation_robustness": 3.8928344696085073,
       "fiedler": NaN
     },
@@ -1284,7 +1284,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.045433327080535,
+      "consensus_error": 0.9601550010141416,
       "separation_robustness": 3.9430964867379297,
       "fiedler": NaN
     },
@@ -1295,7 +1295,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.041724247453848,
+      "consensus_error": 0.9583536001183457,
       "separation_robustness": 3.9066309300907243,
       "fiedler": NaN
     },
@@ -1306,7 +1306,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.037753814628209,
+      "consensus_error": 0.9563488263267601,
       "separation_robustness": 4.245012390181473,
       "fiedler": NaN
     },
@@ -1317,7 +1317,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.035024870807523,
+      "consensus_error": 0.9556516521864324,
       "separation_robustness": 4.121174666830338,
       "fiedler": NaN
     },
@@ -1328,7 +1328,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.032988254851611,
+      "consensus_error": 0.9556948032263946,
       "separation_robustness": 4.581083370853796,
       "fiedler": NaN
     },
@@ -1339,7 +1339,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.030077164366355,
+      "consensus_error": 0.9548849376911551,
       "separation_robustness": 4.682180805179271,
       "fiedler": NaN
     },
@@ -1350,7 +1350,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.027907620376734,
+      "consensus_error": 0.954834353638706,
       "separation_robustness": 4.639614181185671,
       "fiedler": NaN
     },
@@ -1361,7 +1361,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.025641878990051,
+      "consensus_error": 0.9546888786712743,
       "separation_robustness": 3.224049490111203,
       "fiedler": NaN
     },
@@ -1372,7 +1372,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.022563576038636,
+      "consensus_error": 0.9537221167177418,
       "separation_robustness": 2.185459218857287,
       "fiedler": NaN
     },
@@ -1383,7 +1383,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.021014360858567,
+      "consensus_error": 0.9542833865445369,
       "separation_robustness": 1.9245439656192467,
       "fiedler": NaN
     },
@@ -1394,7 +1394,7 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.020419854335703,
+      "consensus_error": 0.9557762876841075,
       "separation_robustness": 4.105753405832241,
       "fiedler": NaN
     },
@@ -1405,415 +1405,8 @@
       "rescued": 7,
       "alive": 7,
       "messages": 42,
-      "consensus_error": 4.018081313240882,
+      "consensus_error": 0.9554697146751866,
       "separation_robustness": 4.494306649225289,
-      "fiedler": NaN
-    },
-    {
-      "t": 120,
-      "coverage": 0.9554585152838428,
-      "detected": 8,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.01611591454164,
-      "separation_robustness": 4.354866329953512,
-      "fiedler": 6.9999999999999964
-    },
-    {
-      "t": 121,
-      "coverage": 0.9580786026200874,
-      "detected": 8,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.015960041310565,
-      "separation_robustness": 3.970948122543448,
-      "fiedler": NaN
-    },
-    {
-      "t": 122,
-      "coverage": 0.9602620087336244,
-      "detected": 8,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.015902494364954,
-      "separation_robustness": 3.5871178302056723,
-      "fiedler": NaN
-    },
-    {
-      "t": 123,
-      "coverage": 0.9624454148471616,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.015598020819782,
-      "separation_robustness": 3.203394908237124,
-      "fiedler": NaN
-    },
-    {
-      "t": 124,
-      "coverage": 0.9641921397379912,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.015484522809077,
-      "separation_robustness": 2.819805001190683,
-      "fiedler": NaN
-    },
-    {
-      "t": 125,
-      "coverage": 0.9672489082969432,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.014078175179269,
-      "separation_robustness": 2.436382612433932,
-      "fiedler": NaN
-    },
-    {
-      "t": 126,
-      "coverage": 0.9720524017467249,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0111996593636015,
-      "separation_robustness": 2.0531752829452623,
-      "fiedler": NaN
-    },
-    {
-      "t": 127,
-      "coverage": 0.977292576419214,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.008150332069683,
-      "separation_robustness": 2.0489002751703014,
-      "fiedler": NaN
-    },
-    {
-      "t": 128,
-      "coverage": 0.9834061135371179,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004552674638526,
-      "separation_robustness": 2.0675572084075453,
-      "fiedler": NaN
-    },
-    {
-      "t": 129,
-      "coverage": 0.9877729257641922,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0026769372997615,
-      "separation_robustness": 1.4201270319423989,
-      "fiedler": NaN
-    },
-    {
-      "t": 130,
-      "coverage": 0.991703056768559,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.001154276812755,
-      "separation_robustness": 2.5121024579970745,
-      "fiedler": NaN
-    },
-    {
-      "t": 131,
-      "coverage": 0.994759825327511,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0003129611287775,
-      "separation_robustness": 2.570709978981922,
-      "fiedler": NaN
-    },
-    {
-      "t": 132,
-      "coverage": 0.9965065502183406,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.000445050830404,
-      "separation_robustness": 2.5294819300536933,
-      "fiedler": NaN
-    },
-    {
-      "t": 133,
-      "coverage": 0.9978165938864629,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.000702645761865,
-      "separation_robustness": 2.5424363217476467,
-      "fiedler": NaN
-    },
-    {
-      "t": 134,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.001475506977703,
-      "separation_robustness": 2.555862746761462,
-      "fiedler": NaN
-    },
-    {
-      "t": 135,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 7,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.002358213770176,
-      "separation_robustness": 2.5699643338556086,
-      "fiedler": NaN
-    },
-    {
-      "t": 136,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.003002400577225,
-      "separation_robustness": 2.5847884744189376,
-      "fiedler": NaN
-    },
-    {
-      "t": 137,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.003472518906341,
-      "separation_robustness": 2.600387240026044,
-      "fiedler": NaN
-    },
-    {
-      "t": 138,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.003815604546953,
-      "separation_robustness": 2.6168172869807087,
-      "fiedler": NaN
-    },
-    {
-      "t": 139,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0040659835462495,
-      "separation_robustness": 2.624047326523435,
-      "fiedler": NaN
-    },
-    {
-      "t": 140,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004248706563093,
-      "separation_robustness": 2.6237900670768566,
-      "fiedler": 6.9999999999999964
-    },
-    {
-      "t": 141,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004382055210456,
-      "separation_robustness": 2.6245429717656874,
-      "fiedler": NaN
-    },
-    {
-      "t": 142,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004479371148322,
-      "separation_robustness": 2.6264081259527146,
-      "fiedler": NaN
-    },
-    {
-      "t": 143,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0045503909295475,
-      "separation_robustness": 2.6294983020350484,
-      "fiedler": NaN
-    },
-    {
-      "t": 144,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004602220151318,
-      "separation_robustness": 2.633938381160702,
-      "fiedler": NaN
-    },
-    {
-      "t": 145,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0046400443769485,
-      "separation_robustness": 2.6398670020390673,
-      "fiedler": NaN
-    },
-    {
-      "t": 146,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004667647956468,
-      "separation_robustness": 2.647438471963973,
-      "fiedler": NaN
-    },
-    {
-      "t": 147,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0046877926544635,
-      "separation_robustness": 2.6568249773916186,
-      "fiedler": NaN
-    },
-    {
-      "t": 148,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.00470249396728,
-      "separation_robustness": 2.6682191312850856,
-      "fiedler": NaN
-    },
-    {
-      "t": 149,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004713222775355,
-      "separation_robustness": 2.68183688980856,
-      "fiedler": NaN
-    },
-    {
-      "t": 150,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004721052506219,
-      "separation_robustness": 2.697920858278211,
-      "fiedler": NaN
-    },
-    {
-      "t": 151,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004726766531951,
-      "separation_robustness": 2.7167439797391886,
-      "fiedler": NaN
-    },
-    {
-      "t": 152,
-      "coverage": 0.9982532751091703,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0047309365463,
-      "separation_robustness": 2.738613549737022,
-      "fiedler": NaN
-    },
-    {
-      "t": 153,
-      "coverage": 0.9986899563318777,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0043628007239,
-      "separation_robustness": 2.871226724899553,
-      "fiedler": NaN
-    },
-    {
-      "t": 154,
-      "coverage": 0.9991266375545852,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.004041645138522,
-      "separation_robustness": 2.5334424101746444,
-      "fiedler": NaN
-    },
-    {
-      "t": 155,
-      "coverage": 0.9995633187772925,
-      "detected": 9,
-      "rescued": 8,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.003754775058979,
-      "separation_robustness": 2.1549523149887024,
-      "fiedler": NaN
-    },
-    {
-      "t": 156,
-      "coverage": 0.9995633187772925,
-      "detected": 9,
-      "rescued": 9,
-      "alive": 7,
-      "messages": 42,
-      "consensus_error": 4.0038641050911,
-      "separation_robustness": 2.8708883691068428,
       "fiedler": NaN
     }
   ],

@@ -1,0 +1,57 @@
+seed,success,completion_time,nonempty_failures,meaningful_recoveries,failures
+44,1,92,0,0,[]
+45,0,240,0,0,"[{""drone"": 7, ""time"": 28, ""tasks"": [], ""detection"": 30, ""recovered"": 28}]"
+46,1,69,0,0,"[{""drone"": 2, ""time"": 39, ""tasks"": [], ""detection"": 39, ""recovered"": 39}]"
+47,1,70,0,0,"[{""drone"": 15, ""time"": 56, ""tasks"": [], ""detection"": 56, ""recovered"": 56}]"
+48,1,52,0,0,"[{""drone"": 13, ""time"": 44, ""tasks"": [], ""detection"": 45, ""recovered"": 44}]"
+49,1,67,0,0,[]
+50,1,75,0,0,"[{""drone"": 17, ""time"": 64, ""tasks"": [], ""detection"": 64, ""recovered"": 64}]"
+51,1,98,0,0,"[{""drone"": 15, ""time"": 1, ""tasks"": [], ""detection"": 5, ""recovered"": 1}]"
+52,1,49,0,0,[]
+53,1,64,0,0,"[{""drone"": 17, ""time"": 11, ""tasks"": [], ""detection"": 14, ""recovered"": 11}]"
+54,0,240,0,0,"[{""drone"": 10, ""time"": 56, ""tasks"": [], ""detection"": 57, ""recovered"": 56}]"
+55,1,81,0,0,[]
+56,1,76,0,0,[]
+57,0,240,0,0,"[{""drone"": 3, ""time"": 81, ""tasks"": [], ""detection"": 81, ""recovered"": 81}]"
+58,1,85,0,0,[]
+59,1,94,0,0,[]
+60,1,72,1,0,"[{""drone"": 3, ""time"": 21, ""tasks"": [""r2"", ""r7""], ""detection"": 21, ""recovered"": null}]"
+61,1,60,0,0,"[{""drone"": 12, ""time"": 33, ""tasks"": [], ""detection"": 33, ""recovered"": 33}]"
+62,1,70,0,0,"[{""drone"": 14, ""time"": 11, ""tasks"": [], ""detection"": 14, ""recovered"": 11}]"
+63,1,73,0,0,"[{""drone"": 18, ""time"": 4, ""tasks"": [], ""detection"": 6, ""recovered"": 4}]"
+64,1,87,0,0,"[{""drone"": 2, ""time"": 41, ""tasks"": [], ""detection"": 42, ""recovered"": 41}]"
+65,1,70,0,0,[]
+66,1,108,0,0,"[{""drone"": 18, ""time"": 96, ""tasks"": [], ""detection"": 97, ""recovered"": 96}]"
+67,1,49,0,0,[]
+68,1,50,0,0,"[{""drone"": 15, ""time"": 37, ""tasks"": [], ""detection"": 37, ""recovered"": 37}]"
+69,1,73,0,0,"[{""drone"": 0, ""time"": 37, ""tasks"": [], ""detection"": 37, ""recovered"": 37}]"
+70,1,77,0,0,[]
+71,1,80,0,0,[]
+72,1,54,0,0,[]
+73,1,74,0,0,"[{""drone"": 0, ""time"": 56, ""tasks"": [], ""detection"": 56, ""recovered"": 56}]"
+74,1,84,0,0,[]
+75,1,84,0,0,"[{""drone"": 11, ""time"": 0, ""tasks"": [], ""detection"": null, ""recovered"": 0}]"
+76,1,70,0,0,"[{""drone"": 1, ""time"": 16, ""tasks"": [], ""detection"": 17, ""recovered"": 16}]"
+77,1,75,0,0,"[{""drone"": 10, ""time"": 35, ""tasks"": [], ""detection"": 35, ""recovered"": 35}]"
+78,1,91,0,0,"[{""drone"": 16, ""time"": 62, ""tasks"": [], ""detection"": 63, ""recovered"": 62}]"
+79,1,77,0,0,[]
+80,1,51,0,0,[]
+81,1,67,0,0,"[{""drone"": 9, ""time"": 54, ""tasks"": [], ""detection"": 55, ""recovered"": 54}]"
+82,1,72,0,0,"[{""drone"": 11, ""time"": 11, ""tasks"": [], ""detection"": 11, ""recovered"": 11}]"
+83,1,105,0,0,"[{""drone"": 13, ""time"": 16, ""tasks"": [], ""detection"": 18, ""recovered"": 16}]"
+84,1,56,1,0,"[{""drone"": 11, ""time"": 33, ""tasks"": [""r9""], ""detection"": 34, ""recovered"": null}]"
+85,1,73,0,0,[]
+86,1,88,0,0,"[{""drone"": 1, ""time"": 68, ""tasks"": [], ""detection"": 68, ""recovered"": 68}]"
+87,1,105,0,0,"[{""drone"": 6, ""time"": 69, ""tasks"": [], ""detection"": 70, ""recovered"": 69}]"
+88,1,84,0,0,"[{""drone"": 2, ""time"": 32, ""tasks"": [], ""detection"": 34, ""recovered"": 32}]"
+89,1,57,0,0,[]
+90,1,77,0,0,[]
+91,1,87,0,0,[]
+92,1,62,0,0,"[{""drone"": 3, ""time"": 0, ""tasks"": [], ""detection"": null, ""recovered"": 0}]"
+93,1,113,0,0,[]
+94,1,54,1,0,"[{""drone"": 7, ""time"": 23, ""tasks"": [""r22""], ""detection"": 25, ""recovered"": null}]"
+95,1,76,1,0,"[{""drone"": 10, ""time"": 38, ""tasks"": [""r15"", ""s4""], ""detection"": 38, ""recovered"": null}]"
+96,0,240,0,0,"[{""drone"": 2, ""time"": 122, ""tasks"": [], ""detection"": 123, ""recovered"": 122}]"
+97,1,100,0,0,"[{""drone"": 16, ""time"": 16, ""tasks"": [], ""detection"": 19, ""recovered"": 16}]"
+98,1,70,0,0,"[{""drone"": 14, ""time"": 61, ""tasks"": [], ""detection"": 62, ""recovered"": 61}]"
+99,1,57,0,0,[]

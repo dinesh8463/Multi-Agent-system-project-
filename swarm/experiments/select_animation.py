@@ -23,7 +23,7 @@ def main() -> None:
     if selected is None:
         raise RuntimeError('No completed real evaluation episode has a non-vacuous recovery')
     path, record = selected
-    settings = record['config'] | {'seed': record['metrics']['seed'], 'frame_stride': 3,
+    settings = record['config'] | {'seed': record['metrics']['seed'], 'frame_stride': 1,
                                    'source_job': str(path).replace('\\', '/')}
     Path('swarm/config/mission_replay.yaml').write_text(yaml.safe_dump(settings, sort_keys=True))
     Path('results/animations').mkdir(parents=True, exist_ok=True)

@@ -1,49 +1,18 @@
 [
   {
-    "drone": 12,
-    "time": 10,
-    "tasks": [],
-    "detection": 10,
-    "recovered": 11
-  },
-  {
-    "drone": 0,
-    "time": 19,
-    "tasks": [],
-    "detection": 20,
-    "recovered": 20
-  },
-  {
-    "drone": 19,
-    "time": 26,
-    "tasks": [
-      "r3",
-      "r4"
-    ],
-    "detection": 26,
-    "recovered": 52
-  },
-  {
     "drone": 6,
-    "time": 38,
-    "tasks": [],
-    "detection": 39,
-    "recovered": 39
-  },
-  {
-    "drone": 7,
-    "time": 48,
-    "tasks": [],
-    "detection": 49,
-    "recovered": 49
-  },
-  {
-    "drone": 17,
-    "time": 82,
+    "time": 21,
     "tasks": [
-      "s1"
+      "s4"
     ],
-    "detection": 83,
-    "recovered": 117
+    "detection": 24,
+    "recovered": 40
+  },
+  {
+    "drone": 11,
+    "time": 49,
+    "tasks": [],
+    "detection": 51,
+    "recovered": 49
   }
 ]

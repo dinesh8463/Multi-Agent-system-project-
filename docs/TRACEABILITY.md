@@ -39,6 +39,8 @@ limitations; it does not claim that a plot is a correctness proof.
 | Own bounded proximity observation and total radio-outage safety | swarm/src/env.py, drone.py, safety.py | test_proximity_is_bounded_own_sensor_state; test_onboard_safety_survives_total_radio_outage | stl_robustness.png |
 | Startup-uniform failures and exact empty-set recovery | swarm/src/selfheal.py, sim.py | test_failure_seed_varies_identity_and_schedule; test_empty_failure_task_set_recovers_at_exact_failure_time | recovery_timeline.png |
 | Latest-residual ADMM convergence validity | swarm/src/drone.py | test_dynamic_admm_does_not_latch_an_old_convergence_flag | admm_convergence.png |
+| Zero-delay nonempty recovery and per-target rescue dwell | swarm/src/metrics.py, drone.py, sim.py | test_recovery_accepts_nonempty_same_step_handoff; test_switching_survivors_restarts_three_step_dwell; results/full/boundary_fix_changes.csv | recovery_timeline.png |
+| Stationary energy accounting and exhaustion crash | swarm/src/drone.py, sim.py | test_stationary_energy_and_battery_exhaustion_crash | mission.gif |
 | GIF/MP4, task colors, battery labels, faults and reallocation | swarm/src/viz.py | results/animations/mission_trace.csv; mission_failures.json | mission.gif; mission.mp4 |
 | Optional live playback, default Agg | swarm/experiments/live.py; swarm/src/viz.py | CLI --live; headless media decoding in verify | mission.gif |
 | Installation, Make targets, actual runtimes and output locations | README.md; Makefile; make.cmd | results/verification.json; run_manifest.json | results/figures/ |
