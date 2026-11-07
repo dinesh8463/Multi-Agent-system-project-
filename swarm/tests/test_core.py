@@ -200,10 +200,12 @@ def test_stl_known_signs_and_local_repulsion():
 
 
 def test_decentralization_ast_and_object_isolation(cfg):
-    forbidden = {'env', 'sim', 'Environment', 'world', 'drones'}
+    forbidden = {'env', 'sim', 'Environment', 'world', 'drone', 'drones'}
     for module in ['drone', 'search', 'selfheal', 'allocation', 'admm', 'consensus']:
         tree = ast.parse(Path(f'swarm/src/{module}.py').read_text())
         for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                assert not any(set(alias.name.split('.')) & forbidden for alias in node.names)
             if isinstance(node, ast.ImportFrom):
                 assert not (set((node.module or '').split('.')) & forbidden)
             if isinstance(node, ast.Attribute):
@@ -342,3 +344,42 @@ def test_empty_failure_task_set_recovers_at_exact_failure_time(cfg):
     assert run['failures']
     assert all(not failure['tasks'] and failure['recovered'] == failure['time'] for failure in run['failures'])
     assert run['metrics']['recovery_time'] == 0
+
+
+def test_stationary_energy_and_battery_exhaustion_crash(cfg):
+    env = Environment(24, 2, cfg)
+    drone = Drone(0, env.positions[0], 80, env.geometry, cfg)
+    drone.found[0] = drone.position.copy()
+    drone.task = 's0'
+    drone.velocity[:] = [2., 0.]
+    drone.move()
+    drone.drain(0)
+    assert drone.battery == pytest.approx(80-cfg['c_sense'])
+    run = simulate(cfg | {'n': 2, 'steps': 4, 'c_sense': 100., 'comm_range': 150.,
+                          'p_link': 0., 'drop': 0., 'delay': 0, 'debug': True}, 24)
+    assert len(run['failures']) == 2
+    assert all(failure['time'] == 1 for failure in run['failures'])
+    assert run['metrics']['messages'] == 2  # one initial send each; exhausted drones stay silent
+
+
+def test_recovery_accepts_nonempty_same_step_handoff():
+    from swarm.src.metrics import recovery_ready
+    assert recovery_ready(['r1'], ['r1', 's2'], 10, 10)
+    assert not recovery_ready(['r1'], ['r1'], 10, 9)
+    assert not recovery_ready(['r1', 's2'], ['r1'], 10, 10)
+
+
+def test_switching_survivors_restarts_three_step_dwell(cfg):
+    env = Environment(24, 2, cfg)
+    drone = Drone(0, np.array([50., 50.]), 80, env.geometry, cfg)
+    drone.found = {0: np.array([49., 50.]), 1: np.array([51., 50.])}
+    drone.task = 's0'
+    drone.move()
+    assert drone.dwell == 1
+    drone.task = 's1'
+    drone.move()
+    assert drone.dwell == 1 and 's1' not in drone.completed
+    drone.move()
+    assert 's1' not in drone.completed
+    drone.move()
+    assert 's1' in drone.completed and 's0' not in drone.completed

@@ -9,7 +9,7 @@ from .drone import Drone
 from .comms import MessageBus, range_graph, fiedler
 from .selfheal import failure_schedule
 from .safety import separation_robustness, response_robustness
-from .metrics import jain
+from .metrics import jain, recovery_ready
 from .allocation import CentralizedAllocator, cost_row
 
 
@@ -132,9 +132,8 @@ def simulate(cfg: dict, seed: int, capture: bool = False) -> dict:
                     min((float(np.linalg.norm(d.position-env.survivors[survivor])) for d in live
                          if d.task == f's{survivor}' or survivor in d.reached), default=1e6))
         for failure in failures:
-            if failure['recovered'] is None and t > failure['time']:
-                if all(key in active_tasks for key in failure['tasks']):
-                    failure['recovered'] = t
+            if failure['recovered'] is None and recovery_ready(failure['tasks'], active_tasks, failure['time'], t):
+                failure['recovered'] = t
         fraction = float(coverage[geom.free].mean())
         consensus_error = max((abs(d.estimate-fraction) for d in live), default=0.)
         messages = bus.attempts-sum(row['messages'] for row in history) if not history else bus.attempts-last_messages

@@ -10,6 +10,11 @@ def jain(work: np.ndarray) -> float:
     return float(work.sum()**2/(len(work)*(work@work))) if work@work > 0 else 1.0
 
 
+def recovery_ready(tasks: list[str], active_tasks: list[str], failure_t: int, t: int) -> bool:
+    """Requested formal predicate, including a nonempty zero-delay handoff."""
+    return t >= failure_t and set(tasks).issubset(active_tasks)
+
+
 def summarize(frame: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for (experiment, condition), data in frame.groupby(['experiment', 'condition']):

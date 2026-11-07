@@ -63,7 +63,7 @@ it has not been interactively verified on this host.
 ## Outputs and reproducibility
 
 - `results/full/exp1.csv` through `exp7.csv`: one row per seed per condition,
-  20 unused holdout seeds (3001-3020). All seven suites total 580 episodes.
+  20 fixed evaluation seeds (3001-3020). All seven suites total 580 episodes.
 - `results/full/summary.csv`: per-condition mean, sample standard deviation,
   and two-sided 95% Student t confidence interval, with seed as sample unit.
 - `results/full/welch_tests.csv`: required Welch comparisons for Experiment 1.
@@ -80,7 +80,8 @@ it has not been interactively verified on this host.
   inherits the same algorithms; only seeds and simulation size/horizon differ.
 - `results/tuning/metrics.json` and `swarm/config/frozen.json`: tuning seeds
   41-43 and the fixed parameters. Earlier 1001/2001-series seeds are pilot/development
-  data, kept separate from the final holdout evaluation.
+  data, kept separate from the final frozen-source evaluation. Some pre-audit
+  smoke checks also used 3001-series scenarios; this is disclosed in assumptions.
 - `results/sanity_report.md`, `verification.json`, `test_output.txt`: gate status,
   checks and test evidence. Verification reruns the demo and tests.
 - `docs/DEFINITIONS.md`, `ASSUMPTIONS.md`, `FINDINGS.md`, `TRACEABILITY.md`:
@@ -130,8 +131,19 @@ The final measured values are written to `results/RUNTIMES.md` from run manifest
 An initial complete reduced smoke run took 47.14 seconds for its 29 experiment
 jobs and about 27 seconds for diagnostic figures and animation. The current
 18-test suite took 19.48 seconds while other experiment processes were running;
-the final expanded suite has 28 tests (see `results/test_output.txt`).
+the expanded suite now has 31 tests (see `results/test_output.txt`).
 Cold dependency installation and first Matplotlib font-cache creation are excluded.
+
+The completed 580-job evaluation took **3291.09 seconds (54.85 minutes)** for the
+jobs plus about 32 seconds for final rendering. The final cold 120-step demo took
+**276.99 seconds** including its figures and media. Verification took 89.44 seconds
+on the first complete pass; a cached demo replay/render took 65.58 seconds. These
+are measured host timings, not the original 2-3-hour planning estimate. The cold
+full manifest is retained separately as `results/full/cold_run_manifest.json`.
+
+The recorded dependency environment is Python 3.12.7; use
+`requirements-lock.txt` for those exact package versions. The minimum-version
+`requirements.txt` supports compatible installations on Python 3.10+.
 
 ## Source layout
 

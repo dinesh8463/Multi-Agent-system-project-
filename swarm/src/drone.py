@@ -38,6 +38,7 @@ class Drone:
         self.finished = 0
         self.distance = 0.
         self.dwell = 0
+        self.dwell_task: str | None = None
         self.detections: list[tuple[int, int]] = []
         self.rounds = self.fallbacks = 0
         self.optimizer = None
@@ -247,6 +248,9 @@ class Drone:
             return
         old = self.position.copy()
         self.velocity[:] = 0
+        if self.task != self.dwell_task:
+            self.dwell = 0
+            self.dwell_task = self.task
         if self.task is None and self.pending_response is not None and self.time % self.cfg['allocation_period'] < self.cfg['allocation_period']//2:
             self.dwell = 0
             return  # hold progress during the lease renewal gap

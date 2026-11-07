@@ -29,3 +29,5 @@ After completion: generate findings, inspect figures/media, run make verify,
 investigate every FAIL, update measured runtimes and traceability, commit M10.
 
 Current execution: all 580 holdout jobs are running with source fingerprint 4b270c9a37639bdd. Do not restart from M0. Full runner session is 12372; inspect results/full/progress.log and wait for all 580 job JSONs and full CSV export. Cold 120-step demo passed in 215.21 seconds; 28 tests passed. Animation replays exp2_failure_10_3004, and every scientific metric matched the source. The healing_recovery point check is an investigated scientific FAIL (docs/INVESTIGATIONS.md); do not change policy or overwrite this negative result. Next run verification after the full runner finishes, review any other failures, then commit M10.
+
+Boundary correction run: previous complete evaluation is preserved in results/pilot_complete_v1. New final source fingerprint 66f1d9c6e0bac348. Recovery >= boundary and per-target dwell reset now have regression tests. Full evaluation must be freshly rerun; do not reuse prior findings/exception notes until comparing the new data. M10 stays unticked until new verification passes.
