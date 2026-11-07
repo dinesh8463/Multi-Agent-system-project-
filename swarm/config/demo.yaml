@@ -1,4 +1,4 @@
 # Size changes only; algorithms inherit the frozen default configuration.
-evaluation_seeds: [1001]
-steps: 240
+evaluation_seeds: [71]
+steps: 180
 frame_stride: 4

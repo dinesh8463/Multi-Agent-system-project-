@@ -1,6 +1,6 @@
 title: Inconsistent information on a verified robust graph
 conditions:
-  ordinary_bias: {resilient: false}
-  wmsr_bias: {resilient: true}
-  ordinary_random: {resilient: false}
-  wmsr_random: {resilient: true}
+  ordinary_bias: {resilient: false, n: 7, comm_range: 150, p_link: 0, drop: 0, delay: 0}
+  wmsr_bias: {resilient: true, n: 7, comm_range: 150, p_link: 0, drop: 0, delay: 0}
+  ordinary_random: {resilient: false, n: 7, comm_range: 150, p_link: 0, drop: 0, delay: 0}
+  wmsr_random: {resilient: true, n: 7, comm_range: 150, p_link: 0, drop: 0, delay: 0}

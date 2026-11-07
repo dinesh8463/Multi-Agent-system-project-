@@ -1,4 +1,4 @@
 title: Self-healing recovery
 conditions:
-  healing_on: {self_heal: true, failure_fraction: 0.2}
-  healing_off: {self_heal: false, failure_fraction: 0.2}
+  healing_on: {self_heal: true, failure_fraction: 0.2, steps: 300}
+  healing_off: {self_heal: false, failure_fraction: 0.2, steps: 300}
