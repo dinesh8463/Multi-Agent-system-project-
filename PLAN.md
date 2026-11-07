@@ -9,10 +9,10 @@ Do not write report/ or slides. Never manufacture a run or a passing check.
 - [x] M3: allocation interface, auction, centralized optimum, metrics.
 - [x] M4: consensus and spectral rate validation.
 - [x] M5: heartbeat detection, failure injection, recovery accounting.
-- [ ] M6: integrated simulation, animation, zero-failure calibration, demo.
-- [ ] M7: constrained edge-consensus ADMM and optimum tests.
-- [ ] M8: W-MSR, graph robustness, safety, STL tests.
-- [ ] M9: seven reproducible experiment suites, figures, tuning/freeze.
+- [x] M6: integrated simulation, animation, zero-failure calibration, demo.
+- [x] M7: constrained edge-consensus ADMM and optimum tests.
+- [x] M8: W-MSR, graph robustness, safety, STL tests.
+- [x] M9: seven reproducible experiment suites, figures, tuning/freeze.
 - [ ] M10: full execution, findings, traceability, verification gate.
 
 Acceptance: all requirements in AGENTS.md; final gate must honestly report

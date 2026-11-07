@@ -1,7 +1,8 @@
 """Lossy delayed neighbor-only transport, with explicit attempt accounting."""
 from __future__ import annotations
 from dataclasses import dataclass
-from copy import deepcopy
+from collections.abc import Mapping
+from types import MappingProxyType
 import numpy as np
 import networkx as nx
 
@@ -29,7 +30,26 @@ class Message:
     recipient: int
     sent: int
     due: int
-    payload: dict
+    payload: Mapping
+
+
+def freeze(value):
+    """Make one immutable snapshot per broadcast, safely shared by recipients.
+
+    This preserves the per-recipient deep-copy semantics without copying a full
+    map/vote matrix once for every edge. Policies cannot mutate cached messages.
+    """
+    if isinstance(value, np.ndarray):
+        result = value.copy()
+        result.setflags(write=False)
+        return result
+    if isinstance(value, dict):
+        return MappingProxyType({key: freeze(item) for key, item in value.items()})
+    if isinstance(value, (tuple, list)):
+        return tuple(freeze(item) for item in value)
+    if isinstance(value, (set, frozenset)):
+        return frozenset(value)
+    return value
 
 
 class MessageBus:
@@ -44,6 +64,7 @@ class MessageBus:
     def send(self, sender: int, payload: dict, t: int, graph: nx.Graph) -> None:
         if sender not in graph:
             return
+        snapshot = freeze(payload)
         # A broadcast is one attempted directed transmission per neighbor.
         for receiver in sorted(graph[sender]):
             self.attempts += 1
@@ -52,7 +73,7 @@ class MessageBus:
                 self.dropped += 1
             else:
                 self.pending.append(Message(sender, receiver, t,
-                                            t+int(self.rng.integers(self.delay+1)), deepcopy(payload)))
+                                            t+int(self.rng.integers(self.delay+1)), snapshot))
 
     def receive(self, t: int, graph: nx.Graph) -> dict[int, list[Message]]:
         boxes = {i: [] for i in graph}

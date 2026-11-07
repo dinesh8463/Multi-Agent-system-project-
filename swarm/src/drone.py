@@ -47,8 +47,19 @@ class Drone:
         self.admm_updates = 0
         self.reached: set[int] = set()
         self.relay_steps = 0
+        self.time = 0
+        self.votes: dict[tuple[int, str, int], int] = {}
+        self.proposals: dict[str, int] = {}
+        self.new_allocation_event = False
+        self.pending_response: str | None = None
+        self.known_allocation_tasks: set[str] = set()
+        self.proximity: dict[int, np.ndarray] = {}
+        self.has_proximity = False
 
     def observe(self, observation: dict) -> None:
+        if 'proximity' in observation:
+            self.proximity = observation['proximity']
+            self.has_proximity = True
         self.seen[observation['seen']] = True
         self.found.update(observation['found'])
         for r in range(self.cfg['regions']):
@@ -57,7 +68,16 @@ class Drone:
                 self.completed.add(f'r{r}')
 
     def receive(self, messages: list, t: int) -> None:
+        self.time = t
+        self.new_allocation_event = False
+        epoch = t//self.cfg['allocation_period']
+        self.votes = {key: value for key, value in self.votes.items() if epoch-1 <= key[0] <= epoch}
         estimates, counts = [], []
+        newest = {}
+        for msg in messages:
+            if msg.sender not in newest or msg.sent > newest[msg.sender].sent:
+                newest[msg.sender] = msg
+        messages = list(newest.values())
         for msg in messages:
             p = msg.payload
             if p.get('signature') == self.signature and self.optimizer is not None:
@@ -67,12 +87,18 @@ class Drone:
             self.seen[p['seen']] = True
             self.found.update(p['found'])
             self.completed |= p['completed']
+            for key, candidate in p.get('votes', {}).items():
+                if epoch-1 <= key[0] <= epoch:
+                    if key in self.votes and self.votes[key] != candidate:
+                        raise AssertionError('A voter signed conflicting leases')
+                    self.votes[key] = candidate
             for i, status in p['status'].items():
                 if i != self.id and status[0] > self.status.get(i, (-1,))[0]:
                     self.status[i] = status
             for i, record in p['suspicions'].items():
                 if record > self.suspicions.get(i, (-1, -1)):
                     self.suspicions[i] = record
+                    self.new_allocation_event = True
             estimates.append(p['estimate'])
             counts.append(p['count_estimate'])
         if estimates:
@@ -88,6 +114,7 @@ class Drone:
             for identity in self.detector.detect(t):
                 self.suspicions[identity] = (t, self.id)
                 self.detections.append((t, identity))
+                self.new_allocation_event = True
         # Dynamic estimates: weak local innovation; not average-preserving consensus.
         own_coverage = float(self.seen[self.geometry.free].mean())
         self.estimate += .15*(own_coverage-self.estimate)
@@ -99,7 +126,7 @@ class Drone:
         return dict(seen=np.flatnonzero(self.seen), found=self.found.copy(),
                     completed=self.completed.copy(), status=self.status.copy(),
                     suspicions=self.suspicions.copy(), estimate=self.estimate,
-                    count_estimate=self.count_estimate)
+                    count_estimate=self.count_estimate, votes=self.votes.copy())
 
     def broadcast(self, t: int) -> dict:
         p = self.payload(t)
@@ -123,11 +150,44 @@ class Drone:
                 # Deterministic integral projection of the agreed fractional matrix.
                 assignment = centralized(-self.optimizer.x, self.optimizer.capacity)[0]
                 _, ids, keys = self.signature
-                self.owners = {key: ids[int(np.argmax(assignment[:, j]))] for j, key in enumerate(keys)}
-                mine = [k for k in keys if self.owners[k] == self.id and k not in self.completed]
-                if self.task not in mine:
-                    self.task = next(iter(mine), None)
+                self.proposals = {key: ids[int(np.argmax(assignment[:, j]))] for j, key in enumerate(keys)}
             self.optimizer = None
+
+    def certify(self, t: int) -> None:
+        """Majority leases prevent split-brain execution without a controller.
+
+        Each initial member signs at most one owner per task per fixed epoch.
+        Any two majorities intersect, so two distinct owners cannot both obtain
+        certificates. Epoch k ballots authorize epoch k+1, allowing pipelined
+        renewal without gaps. Old leases expire at a common time boundary.
+        Minority partitions retain search freedom but cannot claim response work.
+        """
+        period = self.cfg['allocation_period']
+        epoch = t//period
+        if t % period >= period//2:
+            for key, candidate in self.proposals.items():
+                ballot = (epoch, key, self.id)
+                self.votes.setdefault(ballot, candidate)
+        counts = {}
+        for (e, key, voter), candidate in self.votes.items():
+            if e == epoch-1 and 0 <= voter < self.cfg['n']:
+                counts[(key, candidate)] = counts.get((key, candidate), 0)+1
+        previous = self.task
+        self.owners = {key: candidate for (key, candidate), count in counts.items()
+                       if count > self.cfg['n']/2 and key not in self.completed}
+        if previous and previous.startswith('s') and previous not in self.completed:
+            self.pending_response = previous
+        if self.pending_response in self.completed or (self.pending_response in self.owners
+                                                       and self.owners[self.pending_response] != self.id):
+            self.pending_response = None
+        mine = [key for key, owner in self.owners.items() if owner == self.id]
+        if self.task in mine and self.task.startswith('s'):
+            return
+        responses = [key for key in mine if key.startswith('s')]
+        if responses:
+            self.task = min(responses, key=lambda key: np.linalg.norm(self.found[int(key[1:])]-self.position))
+        elif self.task not in mine:
+            self.task = next(iter(sorted(mine)), None)
 
     def tasks(self) -> tuple[list[str], np.ndarray, np.ndarray]:
         keys, points, priorities = [], [], []
@@ -149,6 +209,7 @@ class Drone:
 
     def allocate(self, t: int) -> None:
         keys, targets, priorities = self.tasks()
+        self.known_allocation_tasks = set(keys)
         if not keys:
             self.task = None
             return
@@ -175,22 +236,16 @@ class Drone:
             self.signature = (t//self.cfg['allocation_period'], tuple(ids), tuple(keys))
             self.admm_updates, self.admm_converged = 0, False
             self.admm_received = {}
-        self.owners = {key: ids[int(np.argmax(assignment[:, j]))] for j, key in enumerate(keys)}
-        mine = [key for key in keys if self.owners[key] == self.id]
-        # Finish a rescue rather than switching target mid-dwell.
-        if self.task in mine and self.task.startswith('s'):
-            return
-        response = [k for k in mine if k.startswith('s')]
-        if response:
-            self.task = min(response, key=lambda k: np.linalg.norm(self.found[int(k[1:])]-self.position))
-        elif self.task not in mine:
-            regions = [k for k in mine if k.startswith('r')]
-            self.task = min(regions, key=lambda k: np.linalg.norm(targets[keys.index(k)]-self.position)) if regions else None
+        self.proposals = {key: ids[int(np.argmax(assignment[:, j]))] for j, key in enumerate(keys)}
 
     def move(self) -> None:
         if not self.alive:
             return
         old = self.position.copy()
+        self.velocity[:] = 0
+        if self.task is None and self.pending_response is not None and self.time % self.cfg['allocation_period'] < self.cfg['allocation_period']//2:
+            self.dwell = 0
+            return  # hold progress during the lease renewal gap
         if self.task and self.task.startswith('s'):
             goal = self.found[int(self.task[1:])]
             if np.linalg.norm(goal-self.position) <= 1.5:
@@ -206,12 +261,15 @@ class Drone:
             self.dwell = 0
             region = int(self.task[1:]) if self.task else None
             goal = waypoint(self.geometry, self.seen, self.position, region, self.id)
-            if self.task is None and self.cfg['self_heal'] and len(self.neighbors) < 2:
-                lost = [i for i in self.detector.suspected if i in self.status]
+            if self.task is None and self.cfg['self_heal'] and (len(self.neighbors) < 3 or self.id == min({self.id} | self.neighbors)):
+                lost = [i for i in self.detector.suspected if i in self.status
+                        and self.time-self.suspicions.get(i, (-100, 0))[0] <= 2*self.cfg['allocation_period']]
                 if lost:
                     # A spare agent heads toward the last locally heard peer to
                     # bridge a gap. No component labels or global graph are read.
-                    candidate = (self.position+self.status[min(lost)][1])/2
+                    lost.sort(key=lambda i: (-self.status[i][0], i))
+                    identity = lost[(self.time//self.cfg['allocation_period']) % len(lost)]
+                    candidate = self.status[identity][1].copy()
                     if self.geometry.valid(candidate):
                         goal = candidate
                         self.relay_steps += 1
@@ -232,12 +290,21 @@ class Drone:
             if self.path:
                 delta = self.path[0]-self.position
                 desired = delta*min(1., speed/max(np.linalg.norm(delta), 1e-9))
-        nearby = [state[1] for i, state in self.status.items() if i in self.neighbors]
-        velocity = local_safe_velocity(self.position, desired, nearby, self.cfg['d_min'], speed)
+        known = {i: (state[1], max(0, self.time-state[0])) for i, state in self.status.items()
+                 if i != self.id and self.time-state[0] <= self.cfg['delay']+self.cfg['h_timeout']}
+        # Own short-range proximity observation supersedes delayed radio data.
+        if self.has_proximity:
+            # The proximity radius covers d_min + 2*v_max, sufficient for one
+            # step: unseen peers cannot close the gap. Ignore obsolete
+            # radio envelopes that could otherwise create artificial deadlocks.
+            known = {i: (position, 0) for i, position in self.proximity.items()}
+        nearby = [state[0] for state in known.values()]
+        ages = [state[1] for state in known.values()]
+        velocity = local_safe_velocity(self.position, desired, nearby, self.cfg['d_min'], speed, ages)
+        if self.time < 3 or any(i not in self.status for i in self.neighbors):
+            velocity = np.zeros(2)
         if legal(velocity):
             self.position += velocity
-        elif legal(desired):
-            self.position += desired
         self.velocity = self.position-old
         step_distance = float(np.linalg.norm(self.velocity))
         self.distance += step_distance

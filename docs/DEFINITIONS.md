@@ -15,6 +15,13 @@ suspicions may be false positives; they are not omniscient crash notifications.
 Recovery is the first step all unfinished tasks owned at failure have live owners
 actively executing them. Unrecovered observations are censored at T-t_failure.
 
+Task execution uses pipelined majority leases: ballots cast in epoch k authorize
+only epoch k+1 (20-second epochs). Each initial identity signs one candidate per
+task per epoch. Certificates require more than N_initial/2 distinct identities;
+old certificates expire at the common boundary. This resolves conflicting local
+auction/ADMM rounding views while exposing minority-partition availability costs.
+Unassigned drones may explore frontiers without claiming a region task.
+
 Costs are distance + inverse-battery distance + workload + connectivity penalty
 minus priority, with weights in YAML. Fractional assignment columns sum to one;
 rows have capacity limits. See admm.py for the edge splitting and projection.
@@ -29,5 +36,19 @@ tests; mission consensus error uses the actual observer coverage fraction.
 Separation robustness is minimum observed distance minus d_min. Response STL
 robustness is max over the allowed window of 1.5-distance, per detection.
 Negative values denote violations; unfinished windows are marked pending.
+The response monitor restricts eligible responders to the assigned task owner
+or an agent that already reached that survivor while assigned. A window with
+no eligible responder uses an explicitly defined finite penalty distance of
+1,000,000 (robustness -999,998.5), rather than an infinite CSV value. This is a
+categorical unassigned-response penalty, never a measured physical distance;
+its magnitude must not be interpreted as geometric error. Deadline violation
+counts exclude immature windows. The three-step rescue requirement is separate.
 Evaluation uses identical scenario seeds across methods and independent RNG
 streams for environment, failures, links, bus and sensing.
+
+An onboard proximity observation is part of own sensor state: only live positions
+within max(r_sense,d_min+2*v_max+0.05) are exposed (6.05 units by default), without
+task, battery or remote-map data. It is independent of radio drops. Feasible local
+motion lies outside every nearby peer's next-step reachable ball; infeasible
+motion holds. This hardware assumption is recorded separately from the lossy
+neighbor-message model for shared mission information.

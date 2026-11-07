@@ -1,0 +1,8 @@
+# Preserve exact source bytes used by scientific cache fingerprints.
+*.py -text
+*.yaml -text
+*.json -text
+*.pdf binary
+*.png binary
+*.gif binary
+*.mp4 binary

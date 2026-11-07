@@ -51,3 +51,10 @@ class Environment:
         found = {int(i): q.copy() for i, q in enumerate(self.survivors)
                  if np.linalg.norm(q-p) <= radius and rng.random() < 0.9}
         return {'seen': seen, 'found': found}
+
+    @staticmethod
+    def proximity(identity: int, position: np.ndarray, positions: np.ndarray,
+                  alive: np.ndarray, radius: float) -> dict[int, np.ndarray]:
+        """Bounded onboard range observation; no tasks, batteries or global map."""
+        return {int(i): other.copy() for i, other in enumerate(positions)
+                if i != identity and alive[i] and np.linalg.norm(other-position) <= radius}
