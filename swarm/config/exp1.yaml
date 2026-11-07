@@ -1,0 +1,5 @@
+title: Centralized versus distributed allocation
+conditions:
+  centralized: {method: centralized}
+  auction: {method: auction}
+  admm: {method: admm}

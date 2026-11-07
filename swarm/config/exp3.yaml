@@ -1,0 +1,5 @@
+title: Communication degradation
+conditions:
+  nominal: {comm_range: 25, p_link: 0.02, drop: 0.05}
+  degraded: {comm_range: 20, p_link: 0.15, drop: 0.15}
+  severe: {comm_range: 15, p_link: 0.3, drop: 0.3}

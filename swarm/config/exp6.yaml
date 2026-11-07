@@ -1,0 +1,6 @@
+title: Inconsistent information on a verified robust graph
+conditions:
+  ordinary_bias: {resilient: false}
+  wmsr_bias: {resilient: true}
+  ordinary_random: {resilient: false}
+  wmsr_random: {resilient: true}

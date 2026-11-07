@@ -1,0 +1,6 @@
+title: Scalability
+conditions:
+  n10: {n: 10, steps: 900}
+  n20: {n: 20, steps: 600}
+  n50: {n: 50, steps: 600}
+  n100: {n: 100, steps: 600}

@@ -1,0 +1,11 @@
+title: Ablations and sensitivity
+conditions:
+  full: {method: admm, self_heal: true, resilient: true, failure_fraction: 0.2}
+  no_admm: {method: auction, self_heal: true, resilient: true, failure_fraction: 0.2}
+  no_healing: {method: admm, self_heal: false, resilient: true, failure_fraction: 0.2}
+  no_resilient: {method: admm, self_heal: true, resilient: false, failure_fraction: 0.2}
+  alpha_low: {alpha: 0.05, failure_fraction: 0.2}
+  alpha_high: {alpha: 0.3, failure_fraction: 0.2}
+  heartbeat_3: {h_timeout: 3, failure_fraction: 0.2}
+  heartbeat_10: {h_timeout: 10, failure_fraction: 0.2}
+  range_35: {comm_range: 35, failure_fraction: 0.2}

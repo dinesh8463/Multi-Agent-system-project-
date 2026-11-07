@@ -1,0 +1,6 @@
+title: Agent failure robustness
+conditions:
+  failure_0: {failure_fraction: 0.0}
+  failure_10: {failure_fraction: 0.1}
+  failure_20: {failure_fraction: 0.2}
+  failure_30: {failure_fraction: 0.3}
