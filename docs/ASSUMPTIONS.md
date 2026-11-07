@@ -52,10 +52,14 @@
   counts are per local suspicion event; FN counts are physical crashes never
   detected by any agent before episode end. Thus FP and FN have different
   denominators and are shown as counts, not commensurate rates.
-- Recovery includes completed tasks, since already finished work needs no new
-  execution. Tasks waiting in an owner's queue do not count as actively resumed.
-  A failure with no unfinished owned tasks is vacuously recovered at the next
-  observer step. Censored recovery times and unrecovered flags remain in JSON.
+- Recovery follows the requested strict simultaneous-activation definition:
+  every unfinished task owned at failure must be a live agent's current selected
+  controller task at the same observed step. Queued work does not qualify; a
+  selected controller can include dwell or a safety hold. Completed-after-failure
+  work is not substituted for current activation. Consequently a mission may
+  finish successfully while this strict recovery event remains censored. Empty
+  failed task sets recover vacuously at the exact failure time (zero delay).
+  Censored times and per-event recovered/null flags remain in the job JSON.
 - A relay heuristic uses only last heard missing-neighbor positions. Sparse
   nodes and locally elected minimum-ID spare agents try recent lost peers,
   rotating targets by epoch. It does not know component geometry or guarantee
@@ -73,9 +77,12 @@
   uses communicated maps/bids, so estimate robustness need not improve mission
   time in this model.
 - Priority-only terms constant across drones do not change the LP optimum when
-  every task must be allocated; priority matters to task selection/execution.
-  Workload and connectivity penalties as written are row constants. This is a
-  limitation of the requested linear objective, not evidence of a priority gain.
+  every task must be allocated: the priority contribution is the constant
+  -w5*sum(priority). Values are generated and included exactly as requested, but
+  this model provides no evidence of a priority-driven assignment gain. Workload
+  and connectivity penalties are row constants; they can redistribute the number
+  of assignments between drones, but cannot distinguish tasks within a row.
+  These are properties of the requested objective, not demonstrated benefits.
 - Failure injection is uniform in the first 60% of the configured horizon.
   Successful episodes stop immediately; later scheduled crashes never occur.
   Both scheduled_failures and failures are retained. Experiments 2 and 4 use a
@@ -87,9 +94,34 @@
   majority leases and the reachable-ball safety controller. The objective weights
   were not changed to favor a method. Final holdout measurements use the frozen
   corrected policy and are not mixed with pilot rows.
-- The animation is an explicitly illustrative scenario, not an evaluation sample:
-  range 45, random link drops 0.12, six scheduled crashes and a 240-second cap.
-  The first tuning seed (41-43) with a real nonempty-task recovery is selected;
-  the chosen seed/configuration and all failure records are saved beside the media.
+- The animation is an explicitly selected replay of evaluation case Experiment 2,
+  failure_10, seed 3004. It is chosen to show a real nonempty-task recovery, not to
+  summarize the seed distribution. Only frame sampling changes; all scientific
+  metrics are checked against the original job. Selection criteria, source row,
+  configuration and failure records are saved beside the media. All aggregate
+  figures retain every evaluation seed, including failures and timeouts.
+- Crashed drones leave the airborne swarm; red X markers denote their last
+  positions. Their grounded bodies are not modeled as new obstacles. Minimum
+  separation is defined among current live airborne agents.
+- Scalability is strong scaling on the same 100x100 workload: 25 geographical
+  regions stay fixed as the drone population grows; the 10-drone horizon is 900
+  seconds and the other population horizons are 600 seconds.
 - No waiting is added to force a two-hour runtime. The measured runtime is
   reported honestly; the requested wall-time estimate is not an artificial goal.
+- Communication overhead is directed packet attempts, not bytes. ADMM matrices
+  piggyback on the heartbeat payload; equal packet counts do not imply equal
+  bandwidth. The specified c_comm model charges messages rather than payload size.
+  The ideal centralized baseline's controller uplinks/downlinks are not modeled;
+  its recorded packet count covers the common peer bus, not a full central-radio
+  architecture comparison.
+- Load in the cost row is cumulative completed response tasks, a historical
+  workload proxy, rather than instantaneous queue length. Per-drone fairness uses
+  distance travelled and includes initially present agents that later crash.
+- Identical scenario/condition combinations appearing in separate suites (for
+  example Exp2 failure_20 and Exp4 healing_on) intentionally repeat the same
+  trajectories. They must not be pooled as additional independent seeds.
+- Uncertainty summaries use approximate Student t intervals on seed means. With
+  all observed successes identical, the empirical t interval is degenerate; it
+  is not a guarantee of the population success probability. Runtime seconds are
+  process wall times under shared multiprocess execution, not isolated CPU
+  benchmarks; concurrent demo/validation activity can affect those timings.

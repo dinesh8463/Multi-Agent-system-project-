@@ -127,7 +127,45 @@ def test_failure_seed_varies_identity_and_schedule():
     b = failure_schedule(2, 20, .3, 600)
     assert len(a) == 6 and set(a) != set(b)
     assert a == failure_schedule(1, 20, .3, 600)
-    assert all(10 <= t < 360 for t in a.values())
+    assert all(0 <= t < 360 for t in a.values())
+    # Startup failures must not be silently excluded from the uniform interval.
+    early = [t for seed in range(30) for t in failure_schedule(seed, 20, .3, 100).values()]
+    assert min(early) == 0 and max(early) >= 55
+
+
+def test_shared_allocator_interface_and_logged_fallback():
+    from swarm.src.allocation import CentralizedAllocator, DistributedAuctionAllocator, DistributedADMMAllocator
+    cost = np.array([[1., 4., 2.], [3., 1., 5.], [4., 3., 1.]])
+    capacity = np.ones(3)
+    for allocator in [CentralizedAllocator(), DistributedAuctionAllocator(), DistributedADMMAllocator(nx.complete_graph(3))]:
+        answer = allocator.assign(cost, capacity)
+        assert np.sum(answer*cost) == pytest.approx(3.)
+        assert np.all(answer.sum(0) == 1) and np.all(answer.sum(1) <= capacity)
+    fallback = DistributedADMMAllocator(nx.path_graph(3), iterations=1)
+    answer = fallback.assign(cost, capacity)
+    assert fallback.fallbacks == 1 and np.all(answer.sum(0) == 1)
+
+
+def test_dynamic_admm_does_not_latch_an_old_convergence_flag(cfg):
+    env = Environment(24, 2, cfg)
+    drone = Drone(0, env.positions[0], 80, env.geometry, cfg | {'admm_k': 2})
+    class Optimizer:
+        peers = [1]
+        x = np.eye(2)
+        def __init__(self):
+            self.calls = 0
+        def dual(self, received):
+            self.calls += 1
+            return (0., 0.) if self.calls == 1 else (10., 10.)
+        def primal(self):
+            return self.x
+    drone.optimizer = Optimizer()
+    drone.admm_received = {1: np.eye(2)}
+    drone.optimize_step(0)
+    assert drone.admm_converged
+    drone.admm_received = {1: np.eye(2)}
+    drone.optimize_step(1)
+    assert not drone.admm_converged and drone.fallbacks == 1
 
 
 def test_local_redistribution_after_suspicion(cfg):
@@ -297,3 +335,10 @@ def test_onboard_safety_survives_total_radio_outage(cfg):
     assert run['metrics']['safety_violations'] == 0
     assert run['metrics']['ownership_conflict_steps'] == 0
     assert run['metrics']['success'] == 0  # minority/no-quorum availability is not hidden
+
+
+def test_empty_failure_task_set_recovers_at_exact_failure_time(cfg):
+    run = simulate(cfg | {'steps': 10, 'failure_fraction': .3, 'debug': True}, 43)
+    assert run['failures']
+    assert all(not failure['tasks'] and failure['recovered'] == failure['time'] for failure in run['failures'])
+    assert run['metrics']['recovery_time'] == 0

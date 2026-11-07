@@ -2,6 +2,8 @@
 from __future__ import annotations
 from pathlib import Path
 import json
+import yaml
+import textwrap
 import numpy as np
 import pandas as pd
 import networkx as nx
@@ -50,10 +52,11 @@ def experiment_figures(frame: pd.DataFrame, summary: pd.DataFrame, folder: Path)
             ax.fill_between(x, s.ci_low, s.ci_high, alpha=.12, color='#16657b')
             display = [label.replace('_', '\n') if len(labels) <= 4 else label.replace('_', ' ') for label in labels]
             ax.set_xticks(x, display, rotation=40, ha='right', fontsize=8)
-            ax.set_ylabel(ylabel)
+            ax.set_ylabel(textwrap.fill(ylabel, 20))
             ax.grid(alpha=.2)
         axes.flat[0].legend()
-        fig.suptitle(f'Experiment {experiment} | {data.seed.nunique()} scenario seeds')
+        count = data.seed.nunique()
+        fig.suptitle(f'Experiment {experiment} | {count} scenario {"seed" if count == 1 else "seeds"}')
         save(fig, folder/f'exp{experiment}.png')
     fig, ax = plt.subplots(figsize=(6.5, 3))
     data = summary[summary.metric == 'success']
@@ -178,16 +181,14 @@ def draw_world(ax, geom, survivors, snapshot, battery_labels: bool = True):
 
 def mission_media(cfg: dict, output: Path, figures: Path, live: bool = False) -> None:
     output.mkdir(parents=True, exist_ok=True)
-    # Shorter injection horizon ensures this demonstration visibly contains crashes.
-    local = cfg | {'steps': 240, 'failure_fraction': .3, 'p_link': .12,
-                   'comm_range': 45, 'frame_stride': 3}
-    for seed in cfg['tuning_seeds']:
-        result = simulate(local, seed, capture=True)
-        if any(f['tasks'] and f['recovered'] is not None for f in result['failures']):
-            break
-    else:
-        raise RuntimeError('No real non-vacuous failure recovery in the illustration seeds')
+    settings = yaml.safe_load((Path(__file__).resolve().parents[1]/'config/mission_replay.yaml').read_text())
+    seed = settings.pop('seed')
+    local = cfg | settings
+    result = simulate(local, seed, capture=True)
+    if not any(f['tasks'] and f['recovered'] is not None for f in result['failures']):
+        raise RuntimeError('Illustration has no real non-vacuous recovery; rerun select_animation')
     (output/'mission_config.json').write_text(json.dumps(local | {'seed': seed}, indent=2))
+    (output/'mission_metrics.json').write_text(json.dumps(result['metrics'], indent=2))
     pd.DataFrame(result['history']).to_csv(output/'mission_trace.csv', index=False)
     (output/'mission_failures.json').write_text(json.dumps(result['failures'], indent=2))
     geom, survivors = result['geometry'], result['survivors']
@@ -216,14 +217,26 @@ def mission_media(cfg: dict, output: Path, figures: Path, live: bool = False) ->
     for filename, snapshot in [('environment_overview', snapshots[0]), ('task_assignment', snapshots[len(snapshots)//2])]:
         fig, ax = plt.subplots(figsize=(5.8, 5.2))
         draw_world(ax, geom, survivors, snapshot, battery_labels=False)
-        ax.set_title(f"t = {snapshot['t']} s")
+        if filename == 'environment_overview':
+            ax.scatter(survivors[:, 0], survivors[:, 1], marker='*', s=65, color='#ed9830', label='Ground-truth survivors')
+            ax.set_title(f"Environment at t={snapshot['t']} s (observer view)")
+            ax.legend(fontsize=8)
+        else:
+            blocks = int(np.sqrt(cfg['regions']))
+            for line in np.linspace(0, geom.size, blocks+1)[1:-1]:
+                ax.axvline(line, color='gray', lw=.5, ls='--', alpha=.4)
+                ax.axhline(line, color='gray', lw=.5, ls='--', alpha=.4)
+            for i, task in enumerate(snapshot['tasks']):
+                if task and snapshot['alive'][i]:
+                    ax.text(*snapshot['positions'][i]+1, task.upper(), fontsize=8)
+            ax.set_title(f"Current task labels at t={snapshot['t']} s")
         save(fig, figures/f'{filename}.png')
     event = next((f['time'] for f in result['failures'] if f['tasks']), snapshots[len(snapshots)//2]['t'])
     fig, axes = plt.subplots(1, 3, figsize=(6.5, 2.8))
     for ax, when, label in zip(axes, [max(0, event-4), event, event+12], ['Before', 'During', 'After']):
         snapshot = min(snapshots, key=lambda s: abs(s['t']-when))
         draw_world(ax, geom, survivors, snapshot, battery_labels=False)
-        ax.set_title(f"{label}: t={snapshot['t']}")
+        ax.set_title(f"{label}: t={snapshot['t']}\nFiedler={snapshot['fiedler']:.2f}", fontsize=9)
         ax.set_xlabel('x'); ax.set_ylabel('y')
     save(fig, figures/'topology_failure.png')
     fig, ax = plt.subplots(figsize=(6.2, 3.4))
@@ -233,13 +246,13 @@ def mission_media(cfg: dict, output: Path, figures: Path, live: bool = False) ->
                 ax.scatter(failure[key], index, marker=marker, color=color, label=key if index == 0 else None)
     ax.set(xlabel='Mission time (s)', ylabel='Observed failure event')
     ax.set_yticks(range(len(result['failures'])),
-                  [f"Drone {f['drone']} ({len(f['tasks'])} tasks)" for f in result['failures']], fontsize=8)
+                  [f"Drone {f['drone']} ({len(f['tasks'])} {'task' if len(f['tasks']) == 1 else 'tasks'})" for f in result['failures']], fontsize=8)
     handles, labels = ax.get_legend_handles_labels()
     if handles:
         ax.legend()
     save(fig, figures/'recovery_timeline.png')
     fig, ax = plt.subplots(figsize=(5.8, 5.2))
-    draw_world(ax, geom, survivors, snapshots[-1])
+    draw_world(ax, geom, survivors, snapshots[-1], battery_labels=False)
     trajectory = result['trajectories']
     for i in range(trajectory.shape[1]):
         ax.plot(trajectory[:, i, 0], trajectory[:, i, 1], lw=.7, alpha=.5)
@@ -255,7 +268,7 @@ def mission_media(cfg: dict, output: Path, figures: Path, live: bool = False) ->
     # FP/FN evaluated from actual local suspicion events across timeout settings.
     rows = []
     for timeout in [3, 5, 10, 20]:
-        metrics = simulate(local | {'h_timeout': timeout}, seed)['metrics']
+        metrics = result['metrics'] if timeout == local['h_timeout'] else simulate(local | {'h_timeout': timeout}, seed)['metrics']
         rows.append(dict(timeout=timeout, false_positives=metrics['false_positives'], false_negatives=metrics['false_negatives']))
     pd.DataFrame(rows).to_csv(output/'heartbeat.csv', index=False)
     fig, ax = plt.subplots(figsize=(6.2, 3.4))

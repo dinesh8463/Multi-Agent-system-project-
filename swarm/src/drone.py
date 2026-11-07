@@ -6,7 +6,7 @@ retained. Remote bids, maps and status can only enter through receive().
 from __future__ import annotations
 import numpy as np
 from .selfheal import Heartbeats
-from .allocation import cost_row, auction
+from .allocation import cost_row, DistributedAuctionAllocator
 from .consensus import wmsr
 from .search import waypoint, route
 from .safety import local_safe_velocity
@@ -72,7 +72,7 @@ class Drone:
         self.new_allocation_event = False
         epoch = t//self.cfg['allocation_period']
         self.votes = {key: value for key, value in self.votes.items() if epoch-1 <= key[0] <= epoch}
-        estimates, counts = [], []
+        estimates, counts, weights = [], [], []
         newest = {}
         for msg in messages:
             if msg.sender not in newest or msg.sent > newest[msg.sender].sent:
@@ -101,15 +101,18 @@ class Drone:
                     self.new_allocation_event = True
             estimates.append(p['estimate'])
             counts.append(p['count_estimate'])
+            degree = p['status'][msg.sender][4]
+            weights.append(1/(1+max(len(self.neighbors), degree)))
         if estimates:
             if self.cfg['resilient']:
                 self.estimate = wmsr(self.estimate, estimates, self.cfg['f_local'])
                 self.count_estimate = wmsr(self.count_estimate, counts, self.cfg['f_local'])
             else:
-                # Convex equal-neighbor averaging handles variable degree.
-                a = min(self.cfg['alpha'], .99/(len(estimates)+1))
-                self.estimate += a*sum(v-self.estimate for v in estimates)
-                self.count_estimate += a*sum(v-self.count_estimate for v in counts)
+                # Delayed Metropolis weights remain a convex update because
+                # every received weight <=1/(own degree+1). Alpha is relaxation.
+                a = min(.99, self.cfg['alpha'])
+                self.estimate += a*sum(w*(v-self.estimate) for w, v in zip(weights, estimates))
+                self.count_estimate += a*sum(w*(v-self.count_estimate) for w, v in zip(weights, counts))
         if self.cfg['self_heal']:
             for identity in self.detector.detect(t):
                 self.suspicions[identity] = (t, self.id)
@@ -136,6 +139,7 @@ class Drone:
     def optimize_step(self, t: int) -> None:
         if self.optimizer is None:
             return
+        self.admm_converged = False  # only the latest full-neighbor residual certifies convergence
         if self.admm_received:
             p, d = self.optimizer.dual(self.admm_received)
             if set(self.admm_received) == set(self.optimizer.peers) and np.sqrt(p) < self.cfg['admm_tol'] and np.sqrt(d) < self.cfg['admm_tol']:
@@ -224,7 +228,7 @@ class Drone:
         capacity = np.full(len(ids), int(np.ceil(len(keys)/len(ids)))+1)
         costs = np.array([cost_row(known[i][1], known[i][2], known[i][3], known[i][4],
                                    targets, priorities, self.cfg['cost_weights']) for i in ids])
-        assignment = auction(costs, capacity)
+        assignment = DistributedAuctionAllocator().assign(costs, capacity)
         self.rounds += 1
         if self.cfg['method'] == 'admm':
             if self.optimizer is not None and not self.admm_converged:

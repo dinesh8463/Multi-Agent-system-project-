@@ -7,7 +7,7 @@ import numpy as np
 def failure_schedule(seed: int, n: int, fraction: float, horizon: int) -> dict[int, int]:
     rng = np.random.default_rng(seed+91417)
     ids = rng.choice(n, int(round(n*fraction)), replace=False)
-    return {int(i): int(rng.integers(10, max(11, int(.6*horizon)))) for i in ids}
+    return {int(i): int(rng.integers(0, max(1, int(.6*horizon)))) for i in ids}
 
 
 @dataclass

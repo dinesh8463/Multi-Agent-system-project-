@@ -42,7 +42,8 @@ def simulate(cfg: dict, seed: int, capture: bool = False) -> dict:
         for d in drones:
             if d.alive and (schedule.get(d.id) == t or d.battery <= 0):
                 tasks = sorted(k for k, owner in d.owners.items() if owner == d.id and k not in d.completed)
-                failures.append(dict(drone=d.id, time=t, tasks=tasks, detection=None, recovered=None))
+                failures.append(dict(drone=d.id, time=t, tasks=tasks, detection=None,
+                                     recovered=t if not tasks else None))
                 d.alive, d.task = False, None
                 d.velocity[:] = 0
         alive = np.array([d.alive for d in drones])
@@ -132,8 +133,7 @@ def simulate(cfg: dict, seed: int, capture: bool = False) -> dict:
                          if d.task == f's{survivor}' or survivor in d.reached), default=1e6))
         for failure in failures:
             if failure['recovered'] is None and t > failure['time']:
-                completed = set.union(*(d.completed for d in live)) if live else set()
-                if all(key in active_tasks or key in completed for key in failure['tasks']):
+                if all(key in active_tasks for key in failure['tasks']):
                     failure['recovered'] = t
         fraction = float(coverage[geom.free].mean())
         consensus_error = max((abs(d.estimate-fraction) for d in live), default=0.)

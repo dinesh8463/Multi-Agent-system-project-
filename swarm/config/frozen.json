@@ -72,11 +72,11 @@
       43
     ]
   },
-  "source_fingerprint": "17123b0b823958a0",
+  "source_fingerprint": "4b270c9a37639bdd",
   "sweep_sha256": {
     "ablation_sensitivity.yaml": "0a1cdd70b556cca0451bafc1c5d0b3c3f7547f70b0a94eb47746c349fcbe7716",
     "default.yaml": "69a6b74dee9935f4373ca91da3d231e46b7866532d2e3e71b41f0b0be7aa1005",
-    "demo.yaml": "9d75197b62c626b1112834d049ef3b2837b6f002b877f1e4cd6ba70e426b7032",
+    "demo.yaml": "195f649916b5bdc941e418a720ff6e4e23b1adb73dc0e05e119094aaa54ea1cc",
     "exp1.yaml": "aba1dec730c81630db005b8c5d34399a1ed07175e54e6d01f17f66be8dfea0a1",
     "exp2.yaml": "497c4cd30ce77ea04bc355d254dc884db9a49264dfe4db4c7bcf6b13600c22a9",
     "exp3.yaml": "5918ccfe3ba1ed36b33759cb937233bd15e3e570ab62a4efeaab1da24806fd53",
@@ -84,5 +84,5 @@
     "exp5.yaml": "2d8b48d643535eddac7448ad5f76de0a2d55e4be984e4a6def4dbf2e5d1bd0b0",
     "exp6.yaml": "e004d328be9d81c95a6d63f03fa1c399557f5ada5ac6e3b6df5a441d458b1306"
   },
-  "decision": "Final policy: event-driven auction/edge ADMM, pipelined majority task leases, robust local barrier, perfect bounded onboard proximity observation, local relay repair. Proximity radius=max(sensing radius,d_min+2*v_max+0.05); it is own sensor state, not radio-shared global information. Objective weights retained. Calibration uses seeds41-43; final unused holdout is3001-3020. All earlier1001/2001-series development/pilot data are excluded. Immutable broadcast snapshots preserve message values and are covered by a separate regression. Demo has180s cap; failure and healing sweeps have300s cap; default horizon600s."
+  "decision": "Final policy: event-driven auction/edge ADMM, pipelined majority task leases, robust local barrier, perfect bounded onboard proximity observation, local relay repair. Proximity radius=max(sensing radius,d_min+2*v_max+0.05); it is own sensor state, not radio-shared global information. Objective weights retained. Calibration uses seeds41-43; final unused holdout is3001-3020. All earlier1001/2001-series development/pilot data are excluded. Immutable broadcast snapshots preserve message values and are covered by a separate regression. Demo has180s cap; failure and healing sweeps have300s cap; default horizon600s. Final specification audit: crash timing covers [0,floor(0.6*T)); mission consensus uses relaxed Metropolis weights; all allocator variants expose assign(); latest ADMM residuals determine convergence; strict simultaneous-active recovery with vacuous zero delay. No physical objective weights changed. Illustration now replays a disclosed completed evaluation episode selected for a real non-vacuous recovery; only frame sampling differs. Demo horizon120s for runtime budget. No evaluation algorithm/physical parameters changed."
 }

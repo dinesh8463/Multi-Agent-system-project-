@@ -130,7 +130,7 @@ The final measured values are written to `results/RUNTIMES.md` from run manifest
 An initial complete reduced smoke run took 47.14 seconds for its 29 experiment
 jobs and about 27 seconds for diagnostic figures and animation. The current
 18-test suite took 19.48 seconds while other experiment processes were running;
-the final expanded suite has 25 tests (see `results/test_output.txt`).
+the final expanded suite has 28 tests (see `results/test_output.txt`).
 Cold dependency installation and first Matplotlib font-cache creation are excluded.
 
 ## Source layout

@@ -15,7 +15,7 @@ limitations; it does not claim that a plot is a correctness proof.
 | Consensus, shared coverage/survivor estimates, lambda2, alpha, disconnection | swarm/src/consensus.py, drone.py | test_consensus_rate_matches_spectral_prediction; results/full/diagnostics/consensus.csv, alpha.csv, disconnection.csv | consensus_theory.png; consensus_alpha_disconnection.png |
 | Distance/battery/workload/connectivity/priority costs | swarm/src/allocation.py | test_auction_capacity_and_optimal_bound; docs/ASSUMPTIONS.md | admm_convergence.png |
 | Edge-consensus ADMM, row-local objective, residuals, rounding, fallback | swarm/src/admm.py, drone.py | test_edge_admm_matches_independent_lp; results/full/diagnostics/admm.csv; admm_fallbacks in exp1.csv | admm_convergence.png |
-| Centralized optimum and distributed greedy comparator | swarm/src/allocation.py | test_infeasible_capacity_rejected; test_auction_capacity_and_optimal_bound | exp1.png |
+| Shared centralized/auction/ADMM assignment interface and optimum | swarm/src/allocation.py | test_shared_allocator_interface_and_logged_fallback; test_infeasible_capacity_rejected; test_auction_capacity_and_optimal_bound | exp1.png |
 | Heartbeat crash detection, FP/FN, topology update | swarm/src/selfheal.py, comms.py, drone.py | test_heartbeat_timeout_and_revival; results/animations/heartbeat.csv | heartbeat_fp_fn.png |
 | Seeded 10/20/30% crashes | swarm/src/selfheal.py; swarm/config/exp2.yaml | test_failure_seed_varies_identity_and_schedule; results/full/exp2.csv | exp2.png |
 | Flooded release, majority leases, local task redistribution | swarm/src/drone.py | test_local_redistribution_after_suspicion; test_settled_assignment_unique_on_common_neighbor_information; test_majority_leases_reject_partition_split_brain | recovery_timeline.png |
@@ -36,6 +36,9 @@ limitations; it does not claim that a plot is a correctness proof.
 | Fixed tuning, frozen configuration, honest findings | swarm/config/frozen.json; docs/ASSUMPTIONS.md | results/tuning/metrics.json; docs/FINDINGS.md | summary_comparison.png |
 | Step invariants, deterministic execution, common-view unique owner | swarm/src/sim.py; swarm/tests/test_core.py | test_determinism_and_step_invariants; test_settled_assignment_unique_on_common_neighbor_information | trajectories.png |
 | Immutable neighbor-message snapshots and transport regression | swarm/src/comms.py | test_bus_broadcast_snapshot_is_immutable_and_isolated; results/tuning/message_snapshot_regression.json | topology_failure.png |
+| Own bounded proximity observation and total radio-outage safety | swarm/src/env.py, drone.py, safety.py | test_proximity_is_bounded_own_sensor_state; test_onboard_safety_survives_total_radio_outage | stl_robustness.png |
+| Startup-uniform failures and exact empty-set recovery | swarm/src/selfheal.py, sim.py | test_failure_seed_varies_identity_and_schedule; test_empty_failure_task_set_recovers_at_exact_failure_time | recovery_timeline.png |
+| Latest-residual ADMM convergence validity | swarm/src/drone.py | test_dynamic_admm_does_not_latch_an_old_convergence_flag | admm_convergence.png |
 | GIF/MP4, task colors, battery labels, faults and reallocation | swarm/src/viz.py | results/animations/mission_trace.csv; mission_failures.json | mission.gif; mission.mp4 |
 | Optional live playback, default Agg | swarm/experiments/live.py; swarm/src/viz.py | CLI --live; headless media decoding in verify | mission.gif |
 | Installation, Make targets, actual runtimes and output locations | README.md; Makefile; make.cmd | results/verification.json; run_manifest.json | results/figures/ |

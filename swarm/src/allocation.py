@@ -39,3 +39,30 @@ class CentralizedAllocator:
     """Global allocation-cost lower bound; only baseline sees every cost row."""
     def assign(self, cost: np.ndarray, capacity: np.ndarray) -> np.ndarray:
         return centralized(cost, capacity)[0]
+
+
+class DistributedAuctionAllocator:
+    """Shared batch interface; the cost matrix is the caller's received bid view."""
+    def assign(self, cost: np.ndarray, capacity: np.ndarray) -> np.ndarray:
+        return auction(cost, capacity)
+
+
+class DistributedADMMAllocator:
+    """Connected reference/batch adapter; the mission uses neighbor EdgeADMM states.
+
+    This adapter exposes the same assignment interface for independent controlled
+    comparisons. It owns no environment or agent references.
+    """
+    def __init__(self, graph, iterations: int = 1500, tolerance: float = 1e-4):
+        self.graph = graph.copy()
+        self.iterations, self.tolerance = iterations, tolerance
+        self.fallbacks = 0
+        self.last_result = None
+
+    def assign(self, cost: np.ndarray, capacity: np.ndarray) -> np.ndarray:
+        from .admm import solve
+        self.last_result = solve(cost, capacity, self.graph, self.iterations, self.tolerance)
+        if not self.last_result['converged']:
+            self.fallbacks += 1
+            return auction(cost, capacity)
+        return centralized(-self.last_result['x'], capacity)[0]
