@@ -1,0 +1,78 @@
+\chapter{Distributed Coordination}
+\section{Overview}
+Each step connects sensing, communication and motion. Drones search for unseen cells, share discoveries, update their estimates and decide which tasks they can execute. A failure feeds back into the same allocation process. Figure~\ref{fig:pipeline} gives the main stages.
+
+\resultfig{architecture}{Coordination pipeline. Each controller uses local observations and neighbor messages. The recovery path returns unfinished work to allocation.}{fig:pipeline}
+
+\section{Search and shared estimates}
+Drones choose unseen frontier cells in their assigned region when possible. Unassigned drones can explore without claiming a region. When direct motion is blocked, A* on the known obstacle map provides a detour. Received maps are combined with the local seen mask. This preserves discoveries as information propagates through the graph.
+
+For a fixed connected graph, the ordinary consensus test uses the iteration
+\begin{equation}
+z_i^{k+1}=z_i^k+\alpha\sum_{j\in\mathcal N_i}a_{ij}(z_j^k-z_i^k),
+\qquad
+a_{ij}=\frac{1}{1+\max\{k_i,k_j\}} .
+\label{eq:consensus}
+\end{equation}
+Here $\mathcal N_i$ is the neighbor set and $k_i$ is its size. The spectral check uses $\alpha=1$ and compares the disagreement decay with the largest non-consensus eigenvalue magnitude of the Metropolis matrix. The mission uses relaxed weights and local innovations because each drone's observations change over time. W-MSR trims up to $F$ values above and up to $F$ values below the drone's own value before averaging. The controlled fault experiment sets $F=1$ on a seven-node complete graph checked for $(2,2)$-robustness. The estimates describe shared mission state. The allocation policy uses communicated maps and bids.
+
+\section{Assignment costs and constraints}
+At an allocation round, let $i$ index candidate drones and $j$ index available search or response tasks. The cost matrix uses the proposal's five factors:
+\begin{equation}
+c_{ij}=d_{ij}
+  + \frac{20d_{ij}}{\max(b_i,1)}
+  + 2L_i
+  + \frac{3}{k_i+1}
+  - 5p_j .
+\label{eq:cost}
+\end{equation}
+The straight-line distance $d_{ij}$ estimates travel effort. The second term makes long trips more expensive for drones with low battery $b_i$. Workload $L_i$ counts completed responses, so one past response adds two cost units. The connectivity penalty is three for a drone with no neighbors and falls with degree $k_i$. The priority $p_j$ belongs to the task. For any given task, it shifts every candidate's cost equally. It therefore changes neither the auction winner nor the gap between its two lowest bids. It also adds a constant to the objective when all task columns are assigned. The fixed weights $(1,20,2,3,5)$ are heuristic design choices shared by the allocation methods. The experiments do not identify optimal weights.
+
+The fractional problem uses an assignment $X=[x_{ij}]$, a cost matrix $C=[c_{ij}]$ and capacities $q_i$:
+\begin{equation}
+\begin{aligned}
+\underset{X}{\operatorname{minimize}}\quad
+  &\sum_i\sum_j c_{ij}x_{ij} \\
+\text{subject to}\quad
+  &\sum_i x_{ij}=1 &&\text{for each task }j,\\
+  &\sum_j x_{ij}\le q_i &&\text{for each drone }i,\\
+  &0\le x_{ij}\le 1 &&\text{for all }i,j .
+\end{aligned}
+\label{eq:assignment}
+\end{equation}
+The centralized baseline solves this problem with ideal global information. The greedy auction sorts tasks by the gap between the best and second-best bids, largest gap first. It assigns each task to the cheapest candidate with remaining capacity. Task and drone order break ties. A large gap signals that using the second choice is comparatively costly. This greedy ordering does not certify a global optimum.
+
+\section{Distributed ADMM}
+Each participant keeps a local copy $X^{(i)}$ of the assignment. Only row $i$ contributes to its local objective. Copies agree over graph edges through edge variables $Z_{ij}$ and scaled duals $U_{ij}^{(i)}$. Let $\mathcal P$ be the feasible set in Equation~\ref{eq:assignment}, and let $C_i$ contain row $i$ of $C$ and zeros elsewhere. The reference update at a node with neighbors is
+\begin{equation}
+\begin{aligned}
+X^{(i),+} &=
+  \Pi_{\mathcal P}\left(
+    \frac{1}{|\mathcal N_i|}\sum_{j\in\mathcal N_i}
+      (Z_{ij}-U_{ij}^{(i)})
+    -\frac{C_i}{\rho|\mathcal N_i|}
+  \right),\\
+Z_{ij}^{+} &=\tfrac12\left(X^{(i),+}+X^{(j),+}\right),\\
+U_{ij}^{(i),+} &= U_{ij}^{(i)}+X^{(i),+}-Z_{ij}^{+}.
+\end{aligned}
+\label{eq:admm}
+\end{equation}
+Projection alternates between column simplices and nonnegative row capacity sets with Dykstra corrections. The primal residual measures disagreement with $Z$, and the dual residual measures changes in $Z$ scaled by $\rho$. In a mission round, nodes exchange copies when their epoch, task list and candidate identities match. The default penalty is $\rho=4$, residual tolerance $10^{-3}$ and local budget 12 updates. The auction supplies proposals while ADMM runs. Accepted ADMM rounds produce rounded proposals, and the run records explicit fallback when a round fails or is replaced before convergence.
+
+\section{Ownership and recovery}
+Agents periodically advertise heartbeats. A receiver suspects a neighbor after five missed steps in the default setting. Sequence-numbered updates spread the suspicion and the release of unfinished work. A later message can clear a suspicion. Drones use their own recent neighbor history for relay moves, so a spare drone may move toward a last known position without knowing the whole partition.
+
+A vote in epoch $k$ can authorize execution in epoch $k+1$. Each initial identity can vote for one candidate per task per epoch. A certificate needs more than half of the initial population. Two majorities must intersect, so an honest voter cannot help certify conflicting owners for the same task and epoch. Leases expire at the shared boundary. The design assumes honest lease voting and a common clock. A minority partition can continue exploring but may have to wait before claiming a task.
+
+\section{Safety and temporal monitoring}
+Each drone has an ideal onboard proximity observation within 6.05 units at default settings. This radius exceeds $d_{\min}+2v_{\max}$, so an unseen drone cannot close the separation gap in one step. For a visible peer, the controller constrains motion using a supporting halfspace outside that peer's next-step reachable ball. Infeasible or blocked movement results in a hold. The observation supplies nearby positions independently of radio messages.
+
+The observer evaluates two discrete-time STL requirements. For separation it records the minimum over sampled steps and live pairs:
+\begin{equation}
+r_{\mathrm{sep}}=\min_{t}\min_{i<j:\,i,j\ \mathrm{live}}
+  \bigl(\|\boldsymbol p_i(t)-\boldsymbol p_j(t)\|-d_{\min}\bigr).
+\end{equation}
+For response it checks whether an eligible assigned drone reaches 1.5 units within 100 steps of detection. The window margin is the maximum of $1.5-d$ over eligible arrivals. An unassigned window uses a categorical penalty. Pending windows remain separate from deadline violations. Arrival and the three-step rescue dwell are measured separately.
+
+\section{Summary}
+Local sensing and message exchange generate task proposals. Majority leases resolve conflicting execution decisions, and the motion barrier constrains each move. The evaluation separates the behavior of these mechanisms from their effect on mission success.

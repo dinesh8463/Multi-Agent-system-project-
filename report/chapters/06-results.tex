@@ -1,0 +1,87 @@
+\chapter{Results and Discussion}
+\section{Overview}
+Healing increased the fraction of missions that finished after crashes. The controlled ADMM solver matched its reference, but mission rounds frequently fell back to auction. Robust consensus reduced estimate error, while mission outcomes stayed the same in the fault comparison. This chapter reports what each comparison supports.
+
+\section{Experiment 1. Allocation methods}
+\begin{table}[!htbp]
+\centering
+\caption{Experiment 1 outcomes from 20 runs per method. Time includes the timeout horizon.}
+\label{tab:alloc-result}
+\begin{tabularx}{\linewidth}{@{}Yrrrrr@{}}
+\toprule
+Method & Finished & Time (s) & Energy & Attempts & Jain index\\
+\midrule
+Centralized & 19/20 & 89.00 & 77.03 & 8,598.2 & 0.976\\
+Auction & 20/20 & 113.95 & 126.91 & 9,430.0 & 0.995\\
+ADMM & 20/20 & 113.95 & 126.91 & 9,430.0 & 0.995\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Table~\ref{tab:alloc-result} reports energy in battery units and communication as the mean total transmission attempts per episode.
+The centralized baseline finished 19 of 20 runs and both distributed methods finished 20 of 20. Mean recorded times were 89.00 seconds for centralized allocation and 113.95 seconds for auction and ADMM (Figure~\ref{fig:exp1}). The Welch comparison for capped time gives $p=0.375$ for centralized versus each distributed method. It does not establish a difference in mean capped time. Centralized allocation used less total battery in these runs ($p\approx3.24\times10^{-5}$ in the recorded Welch comparison). Mission length and flight decisions also influence energy use.
+
+Auction and ADMM produced identical completion times in all 20 matched cases. In the ADMM condition, 26,867 of 27,267 started local rounds explicitly fell back to auction, about 98.53\%. Some rounds can remain in progress when a mission ends. We did not measure a mission-time benefit from adding ADMM. The fixed connected test in Figure~\ref{fig:admm-check} ends with an objective gap of about $2.35\times10^{-7}$ relative to the LP. This tests convergence on a fixed instance.
+
+\resultfig{exp1}{Allocation comparison over 20 seeds per condition. Time includes timeout horizons. Source: \projectlink{results/full/exp1.csv}{Experiment 1 CSV}.}{fig:exp1}
+\FloatBarrier
+
+\section{Experiment 2. Drone crashes}
+At 0, 10, 20 and 30\% scheduled failures, success was 100, 100, 80 and 80\%, respectively. Mean recorded time increased from 113.95 seconds to 199.90 seconds (Figure~\ref{fig:exp2}). The 10, 20 and 30\% groups observed 33 of 40, 66 of 80 and 105 of 120 scheduled crashes. These counts account for missions ending before later crashes. At 20 and 30\%, the sample success fractions were equal and time varied considerably across scenarios.
+
+\resultfig{exp2}{Crash sweep. The success fraction drops at 20\% scheduled failures. Source: \projectlink{results/full/exp2.csv}{Experiment 2 CSV}.}{fig:exp2}
+\FloatBarrier
+
+\section{Experiment 3. Radio degradation}
+Under nominal, degraded and severe radio settings, 20, 13 and one of 20 missions finished, respectively. The severe case still had near-complete mean coverage at the horizon (Figure~\ref{fig:exp3}). Drones can keep exploring when they struggle to exchange assignments. The combined sweep cannot isolate the separate effects of range, link failures and packet drops.
+
+\resultfig{exp3}{Radio conditions change mission success despite high observed coverage. Source: \projectlink{results/full/exp3.csv}{Experiment 3 CSV}.}{fig:exp3}
+\FloatBarrier
+
+\section{Experiment 4. Mission completion and strict recovery}
+At 20\% scheduled failures, healing increased mission success from 4 of 20 to 16 of 20. Mean recorded time decreased from 259.85 to 187.90 seconds (Figure~\ref{fig:exp4}). The strict per-episode recovery score moved in the other direction, from 96.25\% without healing to 93.75\% with healing. The paired difference was $-2.50$ percentage points with an approximate 95\% interval of $[-7.73,2.73]$ percentage points. The expected improvement in strict recovery did not pass the sanity check.
+
+\begin{table}[!htbp]
+\centering
+\caption{Observed failures by work held at the failure step in Experiment 4.}
+\label{tab:events}
+\begin{tabularx}{\linewidth}{@{}Yrrrr@{}}
+\toprule
+Condition & Crashes & Empty sets & Nonempty sets & Nonempty recovered\\
+\midrule
+Healing off & 73 & 68 & 5 & 2\\
+Healing on & 66 & 60 & 6 & 2\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Most failures had no unfinished work and qualified for immediate recovery. We audited seed 3012 in the healing-on group. Drone 2 crashed at step 31 while holding region R16, which had 80.56\% coverage at that point. Other flights took R16 above 95\% at step 53. No live drone selected R16 as its current task after the crash, so that event stayed unrecovered by the strict rule even though the mission finished at step 212. This explains how task reactivation and mission success can diverge in a specific trace. The event counts are too small to establish a general improvement in nonempty handoffs.
+
+\resultfig{exp4}{Healing comparison. The bottom-right panel is mean recorded recovery time. The text gives strict recovery rates. Source: \projectlink{results/full/exp4.csv}{Experiment 4 CSV}.}{fig:exp4}
+\FloatBarrier
+
+\section{Experiment 5. Scaling}
+For 10, 20, 50 and 100 drones, mission success was 95, 100, 85 and 45\%, respectively. Figure~\ref{fig:exp5} uses the source figure's alphabetical condition order. Mean transmission attempts per step increased from 22.72 at 10 drones to 1,782.32 at 100. All 11 timed-out 100-drone episodes reached the coverage target and detected every survivor, but left rescues unfinished. We have not isolated whether assignment availability, local movement constraints or another factor dominated these stalls. The different 10-drone horizon also matters when comparing raw times.
+
+\resultfig{exp5}{Scaling on a fixed map. The 10-drone condition has a longer horizon. Source: \projectlink{results/full/exp5.csv}{Experiment 5 CSV}.}{fig:exp5}
+\FloatBarrier
+
+\section{Experiment 6. Resilient consensus}
+Under bias, controlled mean honest-reference error dropped from 9.49732 with ordinary consensus to 0.04352 with W-MSR. Under random reports it dropped from 3.27952 to 0.01606. The respective mission coverage-estimate errors were 0.96900 and 0.32464 for ordinary consensus and about 0.00947 in both W-MSR conditions. The controlled curves appear in Figure~\ref{fig:wmsr}. All four mission conditions finished 19 of 20 runs with the same mean recorded time of 169.90 seconds. Allocation uses local maps and bids, which explains why a better scalar estimate did not change assignment decisions in this test.
+
+\resultfig{exp6}{Faulty-report comparison. Controlled and mission estimate errors are separate measures. Source: \projectlink{results/full/exp6.csv}{Experiment 6 CSV}.}{fig:exp6}
+\FloatBarrier
+
+\section{Experiment 7. Ablations and sensitivity}
+The full configuration finished 18 of 20 missions. Disabling healing reduced that to six. Removing ADMM or resilient consensus left 18 successful missions in each condition. This suite did not apply the misinformation intervention of Experiment~6. The recorded timeout-3, timeout-10 and range-35 configurations each finished 19 missions. Both tested consensus relaxation variants finished 18. The small samples and configuration differences described in Chapter~\ref{chap:evaluation} limit causal conclusions for parameter variants. Figure~\ref{fig:exp7} shows all nine conditions.
+
+\tallfig{exp7}{Ablation and sensitivity. Each point summarizes 20 runs. Source: \projectlink{results/full/exp7.csv}{Experiment 7 CSV}.}{fig:exp7}
+\FloatBarrier
+
+\section{Verification and an observed handoff}
+The full evaluation recorded zero pair-step separation violations and zero duplicate task execution steps. The smallest separation margin was about 0.050 units. Some responses still missed their deadlines. The saved \projectlink{results/sanity_report.md}{verification record} reports a passing completion gate with the strict recovery exception documented separately. Conditional separation depends on the accurate local proximity measurements and bounded speed specified in the model.
+
+In the selected replay (Experiment~2, seed 3004), Drone 6 crashed at 21 seconds with survivor task S4 unfinished. A neighbor detected the failure at 24 seconds and a live drone resumed S4 at 40 seconds, a 19-second strict handoff. The replay records 20 losses of previously visible radio edges before the handoff while their endpoints remained in range. The second crash had no owned work. Figures~\ref{fig:timeline} and \ref{fig:topology} show this sequence. The original \projectlink{results/animations/mission.mp4}{MP4 replay} and \projectlink{results/animations/mission.gif}{animated GIF} accompany the data. The seed illustrates one handoff.
+
+\section{Summary}
+Healing improved mission completion under injected crashes, while the strict reactivation check failed. The controlled tests show agreement on assignment cost and more reliable estimation under faulty reports. In complete missions, radio degradation, frequent ADMM fallback and incomplete rescues at larger populations remained material constraints.

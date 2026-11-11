@@ -10,7 +10,11 @@ Read [the verification report](results/sanity_report.md) before interpreting
 results. A successful Python process is not evidence that every scientific or
 safety requirement passed. [Findings](docs/FINDINGS.md) and
 [assumptions](docs/ASSUMPTIONS.md) explicitly describe remaining limitations.
-No report or presentation is included.
+The [course report](report/AI3403_Project_Report.pdf) includes the four-member
+contribution statement, all 20 original figures, and links to the saved runs.
+[LaTeX build instructions](report/README.md) and the
+[presentation package](presentation/release/Drone_Swarm_Presentation_Package.zip)
+are included.
 
 ## Install and run
 

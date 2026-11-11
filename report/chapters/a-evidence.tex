@@ -1,0 +1,59 @@
+\chapter{Reproduction and Supporting Figures}
+\section{Overview}
+This appendix locates the evidence behind the report and collects controlled diagnostics and selected replay views. All plots are original simulator outputs. The experiment summaries use 20 evaluation seeds per condition.
+
+\section{Reproduction}
+The \href{\repo}{public repository} contains the simulator and recorded runs. From its root, create an isolated Python environment and use the following commands.
+\begin{verbatim}
+python -m pip install -r requirements.txt
+python -m pytest -q
+python -m swarm.experiments.run_all --demo
+python -m swarm.experiments.run_all --workers 4
+python -m swarm.experiments.verify
+\end{verbatim}
+The run directory contains one JSON per episode, including the configuration, history and source fingerprint. The full manifest records about 58.7 minutes for the 580 jobs on four workers, excluding final media rendering. The recorded cold demo took about 149 seconds including media. File paths in Table~\ref{tab:evidence} refer to the repository root.
+
+\begin{table}[!htbp]
+\centering
+\caption{Where to find the report evidence.}
+\label{tab:evidence}
+\begin{tabularx}{\linewidth}{@{}Y Y@{}}
+\toprule
+Item & Location\\
+\midrule
+Per-seed results and statistical summaries & \path{results/full/exp1.csv} through \path{results/full/exp7.csv}, and \path{results/full/summary.csv}\\
+Full job histories and run timing & \path{results/full/jobs/}, \path{results/full/run_manifest.json}\\
+Recovery investigation & \path{docs/INVESTIGATIONS.md}, \path{results/full/recovery_event_summary.csv}\\
+Verification and assumptions & \path{results/sanity_report.md}, \path{docs/ASSUMPTIONS.md}\\
+Replay and source figures & \path{results/animations/}, \path{results/figures/}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+\section{Controlled diagnostics}
+These figures test individual mechanisms. The ADMM objective gap concerns the fixed connected reference instance. The spectral plot compares the measured disagreement decay with the fixed-graph prediction. During temporary disconnection the network cannot exchange information across components. The W-MSR curves use the controlled seven-node fault setting.
+\resultfig{admm_convergence}{Primal and dual residuals and objective gap against the centralized LP on a fixed connected instance.}{fig:admm-check}
+\resultfig[.83\linewidth]{consensus_theory}{Fixed-graph consensus disagreement and spectral prediction. The curves overlap at the plotted scale.}{fig:consensus-check}
+\resultfig{consensus_alpha_disconnection}{Consensus step-size comparison and a controlled interval of temporary graph disconnection.}{fig:disconnection}
+\resultfig{wmsr_byzantine}{Controlled error under biased and random reports. W-MSR keeps the honest estimates close in this tested setting.}{fig:wmsr}
+\FloatBarrier
+
+\section{Recovery and safety views}
+The following snapshots and traces come from the selected mission. The heartbeat sweep illustrates false suspicions and missed failures in the replay. False positives count receiver suspicion events, while false negatives count physical crashes never detected. They have different denominators.
+\resultfig{topology_failure}{Radio edges before, during and after the first failure. A red cross marks the crashed drone.}{fig:topology}
+\resultfig[.85\linewidth]{recovery_timeline}{Failure, detection and resumption on the replay timeline. The second failure had no unfinished task.}{fig:timeline}
+\resultfig[.84\linewidth]{heartbeat_fp_fn}{Heartbeat false-positive and false-negative counts as the timeout changes on the recorded trace.}{fig:heartbeat}
+\resultfig[.73\linewidth]{task_assignment}{Selected task labels on the recorded map at 57 seconds.}{fig:task-map}
+\resultfig[.73\linewidth]{trajectories}{Recorded flight trajectories around obstacles. Crosses show physical crashes.}{fig:trajectories}
+\resultfig[.87\linewidth]{stl_robustness}{Separation margin and the recorded response-window robustness for the selected mission. The dashed line marks zero.}{fig:stl}
+\FloatBarrier
+
+\clearpage
+\section{Summary across conditions}
+Figure~\ref{fig:all-success} summarizes mission success across the seven suites. Each condition has a different purpose. Use the within-suite comparisons in Chapter~6 when interpreting differences.
+\resultfig[\linewidth]{summary_comparison}{Observed mission success across all 29 conditions, with approximate 95\% Student $t$ intervals.}{fig:all-success}
+\FloatBarrier
+
+\section{Summary}
+The repository pairs source code with per-run evidence, aggregate tables and the original figures. The diagnostics and replay make specific claims inspectable alongside the full experiment results.

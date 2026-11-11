@@ -1,0 +1,14 @@
+\chapter{Conclusion and Next Steps}
+\section{Overview}
+We built and evaluated a swarm that searches, communicates and reallocates work when drones and links fail. The evidence supports continued operation after some failures and also identifies scenarios in which that coordination is insufficient.
+
+\section{What we learned}
+The clearest mission result was the improvement from 20\% to 80\% success with healing in the matched 20\% crash comparison. Strict recovery instead measured a slight decline. The trace audit showed that a region can be searched by other drones without the failed drone's task being explicitly reactivated. Reporting both measures makes the limits of the claim clear.
+
+Our distributed optimizer solved a controlled assignment instance to the tested accuracy, but changing membership and short mission rounds caused frequent auction fallback. W-MSR reduced estimate error under controlled scalar faults. The recorded motion and lease rules prevented separation and duplicate-execution violations in the evaluated cases. These checks are tied to the simulated observation, speed and voting assumptions.
+
+\section{Next steps}
+First, we would trace each unfinished rescue in the 100-drone cases through its lease, chosen motion and dwell history. That would distinguish lack of assignment from an assigned drone failing to arrive or remain in range. Second, we would measure whether longer or more stable optimization rounds reduce ADMM fallback enough to justify their communication and delay. Third, we would add sensing error and report bytes transmitted alongside packet attempts. A separate task selection rule could make priority influence which work begins first. A weight sweep could then assess the trade-offs in a new evaluation.
+
+\section{Summary}
+Local coordination can keep the simulated mission progressing after partial failure. Completing rescues under severe radio loss and at larger scale remains the main design challenge. The appendix gives the recorded diagnostics and the steps to reproduce the analysis.

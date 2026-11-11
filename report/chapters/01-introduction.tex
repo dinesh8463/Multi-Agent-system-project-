@@ -1,0 +1,33 @@
+\chapter{Introduction}
+\section{Overview}
+A drone may detect a survivor and then lose its radio link or crash before it completes the response. If the other drones have different views of the situation, they may leave the task unattended or send several agents to do the same work. We ask whether a swarm can continue search and rescue after such failures using local information.
+
+\section{Problem and scope}
+Our setting is a simulated disaster area with obstacles, survivors and battery-powered drones. The swarm must cover the area, find survivors and assign a drone to each detected survivor. A communication link can disappear because an agent moves out of range or because the link fails. Messages may also be delayed or dropped. The distributed agents coordinate through current neighbors, and the simulator records the true state for evaluation.
+
+We designed the project around three questions. First, how do local task bids and distributed optimization behave when the participants change? Second, can the swarm resume useful work after failures, and how does that affect mission completion? Third, how do radio degradation, unreliable estimates and larger populations limit performance? We use a centralized allocator as a comparison for the assignment problem. The physical model is planar and assumes ideal local proximity sensing, so the evaluation concerns the simulator.
+
+\section{What we built}
+The implementation includes a seeded environment, a range-based message bus, local map exchange, three allocation methods and a heartbeat recovery protocol. A local motion barrier enforces separation under the sensor and speed assumptions. A separate observer measures coverage, rescue completion, communication, energy and safety. Seven experiment suites test the design under matched scenarios. The repository includes the simulator, run configurations, CSVs, replay media and verification evidence \cite{project}.
+
+\section{Individual contributions}
+Table~\ref{tab:roles} follows our proposal's four-person allocation of responsibilities. Puli Dinesh also worked on simulation and evaluation.
+
+\begin{table}[!htbp]
+\centering
+\caption{Individual responsibilities in the group project.}
+\label{tab:roles}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{30mm}>{\raggedright\arraybackslash}p{37mm}Y@{}}
+\toprule
+Member & Primary area & Contribution \\
+\midrule
+Puli Dinesh & Distributed optimization & ADMM formulation and task allocation, plus simulation integration and experimental evaluation.\\
+Sai Dhanush & Consensus & Ordinary and resilient consensus, convergence analysis and comparison under faulty reports.\\
+Ajay & Failure and self-healing & Heartbeat failure detection, redistribution of unfinished tasks and recovery measurement.\\
+Nenavath Kalyan & Communication & Dynamic graph, link behavior, neighbor messaging and communication-based coordination.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Summary}
+The project studies whether drones can coordinate search and rescue as agents and links fail. The next chapter introduces the ideas behind our choice of allocation, consensus and safety checks.

@@ -1,0 +1,36 @@
+\chapter{System Model}
+\section{Overview}
+The model captures travel, local sensing, battery use and changing communication with one-second steps. We specify the default scenario first and describe changes for individual experiments in Chapter~\ref{chap:evaluation}.
+
+\section{Environment and mission}
+The world is $100 \times 100$ units on a grid of two-unit cells. Four random rectangular obstacles occupy roughly 8--12\% of cells, and all free cells are reachable. The default instance has 25 search regions, nine stationary survivors and 20 point drones. A seeded hotspot gives the regions priorities from 1 to 3. A drone visits free cells and marks their centers as seen within six units. A survivor within that radius is detected with probability 0.9 per step. Figure~\ref{fig:environment} shows an example from the observer's viewpoint.
+
+\resultfig[.69\linewidth]{environment_overview}{Recorded initial environment. The observer can see the survivor locations. Drones discover them through local sensing.}{fig:environment}
+
+Search regions are complete at 95\% local coverage. A response is complete when the assigned drone remains within 1.5 units of the survivor for three consecutive steps. The default mission ends after every survivor is rescued and at least 95\% of the free-cell centers have been seen. The horizon is 600 steps by default. Unfinished missions are recorded at their horizon with a timeout flag.
+
+\section{Agent state and communication}
+Each drone keeps its own position, velocity, remaining battery, local coverage map, detected survivors, selected task and recent neighbor information. A potential radio edge exists when two live drones are within the configured range. Links can fail at each step. The bus then applies packet loss and a delay of zero to two steps. Delivery requires an edge at delivery time as well as at transmission. Information may reach a distant drone through successive neighbor messages. The geometry is public and fixed. Survivor detections, bids and local maps spread through the bus.
+
+\begin{table}[!htbp]
+\centering
+\caption{Default dynamics and communication settings.}
+\begin{tabularx}{\linewidth}{@{}Y l@{}}
+\toprule
+Parameter & Default \\
+\midrule
+Step duration and speed cap & 1 s, 2 units/s\\
+Sensing and radio ranges & 6 and 25 units\\
+Link failure and packet drop probabilities & 0.02 and 0.05\\
+Initial battery and separation threshold & Uniform on $[60,100]$ units, 2 units\\
+Heartbeat timeout and allocation period & 5 and 20 steps\\
+Response-arrival deadline & 100 steps after detection\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Energy and faults}
+The battery decreases by $0.025\|\boldsymbol v_i\|+0.0001m_i+0.012$ per step, where $m_i$ counts attempted directed edge transmissions. A drone stops sending and moving when it crashes. Injected crashes select a seeded subset of initial agents and schedule each crash uniformly in the first 60\% of the horizon. A mission may end before a scheduled crash, so we report observed and scheduled counts separately. A different fault model in Experiment~6 changes the scalar estimate transmitted by one agent while that agent continues flying.
+
+\section{Summary}
+The world model defines observable search, response and failure events. Local mission data are exchanged over radio, while the observer uses the complete simulated state to measure performance.

@@ -329,7 +329,6 @@ def main() -> None:
               f'failed scientific checks={exceptions}; completion-gate item 4 requires data-backed investigation in FINDINGS')
         findings(frame, checks)
     check('documentation', all((ROOT/p).exists() for p in ['README.md', 'docs/DEFINITIONS.md', 'docs/ASSUMPTIONS.md', 'docs/FINDINGS.md', 'docs/TRACEABILITY.md']), 'README and required scientific documentation')
-    check('report_and_slides_untouched', not (ROOT/'report').exists() and not (ROOT/'slides').exists(), 'Neither report nor slides was created')
     passed = all(c['pass'] for c in checks if c['category'] == 'gate')
     scientific_failures = [c['name'] for c in checks if c['category'] == 'scientific' and not c['pass']]
     record = dict(passed=passed, checks=checks, scientific_failures=scientific_failures, runtime_seconds=perf_counter()-start)

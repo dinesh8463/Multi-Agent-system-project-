@@ -1,0 +1,15 @@
+\chapter{Technical Background}
+\section{Overview}
+The swarm makes two kinds of decisions. It assigns work to individual drones and shares estimates of the mission state. These decisions have different goals, which helps explain why improving an estimate need not change which survivor is rescued.
+
+\section{Task allocation and distributed optimization}
+Multi-robot task allocation asks which robot should perform which job under costs and constraints \cite{gerkey}. Our costs reflect travel distance, battery, previous work and connectivity. A centralized linear program provides an assignment-cost reference. A local greedy auction proposes a feasible assignment quickly when enough capacity is available in its bid view. The alternating direction method of multipliers (ADMM) splits an optimization problem into local updates coupled by agreement constraints \cite{boyd}. It gives us a way to compare fast bidding with iterative agreement on a fixed assignment problem.
+
+\section{Consensus with changing neighbors}
+In ordinary average consensus, agents repeatedly combine their current estimate with values received from neighbors. The spectrum of the update matrix governs the decay of disagreement on a fixed graph \cite{xiao}. Metropolis weights can be computed from local degrees \cite{metropolis}. This is useful when the graph changes with motion. A malicious sender can still pull an ordinary average toward a false value. Weighted mean-subsequence-reduced (W-MSR) consensus discards up to a specified number of high and low reports relative to the receiver's value before averaging. Its resilience depends on connectivity and the assumed number of faulty neighbors \cite{leblanc}.
+
+\section{Safety and measurable requirements}
+Signal temporal logic (STL) lets us express requirements over time and attach a signed robustness value \cite{fainekos}. A separation margin measures how much clearance remains above a threshold. A response margin measures whether an eligible drone gets close enough before a deadline. Monitoring a trace gives evidence about that trace. The motion controller enforces a local separation rule separately from the observer's measurement.
+
+\section{Summary}
+We use the assignment problem to compare allocation methods, consensus to share estimates and temporal requirements to evaluate behavior. The following chapter defines the environment, information and mission outcomes that these methods operate on.

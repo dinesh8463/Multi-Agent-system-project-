@@ -1,0 +1,41 @@
+\chapter{Experimental Design}
+\label{chap:evaluation}
+\section{Overview}
+We varied one part of the system at a time where the experiment supports that comparison. Every reported condition has 20 recorded seeds, and we keep failed runs in the analysis.
+
+\section{Scenario pairing and run provenance}
+The evaluation uses seeds 3001--3020 across 29 conditions, yielding 580 episodes. Compared methods share the seeded world, survivors, initial positions, batteries and intervention schedule where applicable. Environment, failures, sensing, links, bus loss and faulty reports use separate random streams. Once trajectories differ, their local observations and links can differ as part of the outcome. Calibration used seeds 41--43. Some evaluation-series scenarios appeared in earlier smoke checks, so this is not a fully blind holdout. The objective weights were retained throughout. Final evaluation outputs were rerun after correcting the same-step recovery boundary and per-survivor dwell reset.
+
+\begin{table}[!htbp]
+\centering
+\caption{Seven evaluation suites. Each condition has 20 seeds.}
+\label{tab:suites}
+\begin{tabularx}{\linewidth}{@{}c >{\raggedright\arraybackslash}p{42mm} Y r@{}}
+\toprule
+Suite & Question & Conditions & Runs\\
+\midrule
+1 & Allocation & Centralized LP, auction and ADMM & 60\\
+2 & Drone failure & 0, 10, 20 and 30\% scheduled crashes & 80\\
+3 & Communication & Nominal, degraded and severe radio settings & 60\\
+4 & Self-healing & On versus off at 20\% scheduled crashes & 40\\
+5 & Scaling & 10, 20, 50 and 100 drones on the same map size & 80\\
+6 & Faulty reports & Ordinary versus W-MSR under bias or random reports & 80\\
+7 & Ablation and sensitivity & Full system, three component removals and five parameter variants & 180\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The crash and healing comparisons use a 300-second horizon. The 10-drone scaling case uses 900 seconds, with 600 seconds for the other populations. The radio comparison varies range, link failures and drops together. From nominal to severe, $(\text{range}, p_{\mathrm{link}}, p_{\mathrm{drop}})$ changes from $(25,.02,.05)$ to $(20,.15,.15)$ and $(15,.30,.30)$. Experiment~6 isolates the scalar misinformation on a complete seven-drone graph with no delay or drop. Experiment~7 reports component removals and the recorded sensitivity configurations. Some parameter variants also differ from the full ADMM/W-MSR configuration, so comparisons with the full system are descriptive.
+
+\section{Measures and uncertainty}
+We report mission success as the fraction finishing by the horizon. Mean recorded time includes the horizon for timeouts. It is a capped summary, with different caps stated explicitly. Coverage is the fraction of free cells seen and detection and rescue are fractions of survivors. Energy is initial minus remaining battery summed over agents. Communication counts directed transmission attempts, including dropped packets. It does not measure bytes. Workload balance uses Jain's index on distance traveled, $J=(\sum_i w_i)^2/(N\sum_i w_i^2)$, over the initial population.
+
+Recovery is measured from a crash to the first step when every unfinished task held at failure is simultaneously selected by a live owner. An empty task set qualifies at the crash step. An unrecovered event keeps its censoring time and an explicit flag. Consensus error uses the initial honest mean in controlled trials and true observer coverage for mission coverage estimates. We also record separation margin, response deadline violations and duplicate execution.
+
+For each condition, we report sample means, standard deviations and approximate two-sided 95\% Student $t$ intervals over seeds. Intervals for fractions can extend outside $[0,1]$, and a constant sample yields a zero-width interval. The required Welch tests compare the allocation groups descriptively. They ignore the scenario pairing and multiple comparisons, and are not a survival analysis. No claim depends on treating overlapping conditions across suites as independent replications.
+
+\section{Verification}
+Tests cover the assignment-cost reference, theoretical consensus rate, graph robustness, local redistribution, separation, STL signs, object isolation and deterministic replay. Debug mode checks coverage and battery monotonicity, obstacle exclusion, dead-agent behavior and bus counts. The verification record reports 31 passing tests, all 580 expected evaluation rows, and matched scenario groups. It separately retains the strict recovery scientific failure.
+
+\section{Summary}
+Pairing scenarios makes method comparisons interpretable. The capped time and success fraction answer different questions, and strict recovery measures task reactivation rather than overall completion. These distinctions are used throughout the results chapter.
