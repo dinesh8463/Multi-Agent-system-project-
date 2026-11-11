@@ -11,7 +11,7 @@ We designed the project around three questions. First, how do local task bids an
 The implementation includes a seeded environment, a range-based message bus, local map exchange, three allocation methods and a heartbeat recovery protocol. A local motion barrier enforces separation under the sensor and speed assumptions. A separate observer measures coverage, rescue completion, communication, energy and safety. Seven experiment suites test the design under matched scenarios. The repository includes the simulator, run configurations, CSVs, replay media and verification evidence \cite{project}.
 
 \section{Individual contributions}
-Table~\ref{tab:roles} follows our proposal's four-person allocation of responsibilities. Puli Dinesh also worked on simulation and evaluation.
+Table~\ref{tab:roles} follows our proposal's four-person allocation of responsibilities. Puli Dinesh served as team lead and also worked on simulation and evaluation.
 
 \begin{table}[!htbp]
 \centering
@@ -19,12 +19,12 @@ Table~\ref{tab:roles} follows our proposal's four-person allocation of responsib
 \label{tab:roles}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{30mm}>{\raggedright\arraybackslash}p{37mm}Y@{}}
 \toprule
-Member & Primary area & Contribution \\
+Member and roll number & Primary area & Contribution \\
 \midrule
-Puli Dinesh & Distributed optimization & ADMM formulation and task allocation, plus simulation integration and experimental evaluation.\\
-Sai Dhanush & Consensus & Ordinary and resilient consensus, convergence analysis and comparison under faulty reports.\\
-Ajay & Failure and self-healing & Heartbeat failure detection, redistribution of unfinished tasks and recovery measurement.\\
-Nenavath Kalyan & Communication & Dynamic graph, link behavior, neighbor messaging and communication-based coordination.\\
+Puli Dinesh\newline{\footnotesize AI23BTECH11019} & Distributed optimization & ADMM formulation and task allocation, plus simulation integration and experimental evaluation.\\
+Sai Dhanush\newline{\footnotesize AI23BTECH11021} & Consensus & Ordinary and resilient consensus, convergence analysis and comparison under faulty reports.\\
+Ajay\newline{\footnotesize AI23BTECH11011} & Failure and self-healing & Heartbeat failure detection, redistribution of unfinished tasks and recovery measurement.\\
+Nenavath Kalyan\newline{\footnotesize CS23BTECH11039} & Communication & Dynamic graph, link behavior, neighbor messaging and communication-based coordination.\\
 \bottomrule
 \end{tabularx}
 \end{table}
